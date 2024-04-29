@@ -15,9 +15,10 @@ namespace SpartaConsoleGame
         public int Level { get; set; }
 
         public int Atk { get; set; }
+        public int CalculateAtk { get => Atk + CalculateItemStat(ItemType.WEAPON); }
 
         public int Def { get; set; }
-
+        public int CalculateDef { get => Def + CalculateItemStat(ItemType.AMOR); } 
         public int Hp { get; set; }
 
         public int Gold { get; set; }
@@ -39,15 +40,40 @@ namespace SpartaConsoleGame
 
         public string GetStatus()
         {
+            int CItemAtk = CalculateItemStat(ItemType.WEAPON);
+            int CItemDef = CalculateItemStat(ItemType.AMOR);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Lv. {Level}");
             sb.AppendLine($"{Name} ( {Job} )");
-            sb.AppendLine($"공격력 : {Atk}");
-            sb.AppendLine($"방어력 : {Def}");
-            sb.AppendLine($"체  력 : {Hp}");
+            sb.Append($"공격력 : {Atk}");
+            if(CItemAtk != 0)
+            {
+                sb.Append($"(+{CItemAtk})");
+            }
+            sb.Append($"\n방어력 : {Def}");
+            if (CItemDef != 0)
+            {
+                sb.Append($"(+{CItemDef})");
+            }
+            sb.AppendLine($"\n체  력 : {Hp}");
             sb.AppendLine($"Gold : {Gold} G");
 
             return sb.ToString();
+        }
+
+        private int CalculateItemStat(ItemType itemType)
+        {
+            int stat = 0;
+            switch (itemType) 
+            {
+                case ItemType.WEAPON:
+                    stat = Inventory.EquipedItems.Sum(item => item.Atk);
+                    break;
+                case ItemType.AMOR:
+                    stat = Inventory.EquipedItems.Sum(item => item.Def);
+                    break;
+            }
+            return stat;
         }
     }   
 

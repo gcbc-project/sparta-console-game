@@ -8,7 +8,9 @@ namespace SpartaConsoleGame
 {
     internal class Inventory
     {
-        List<InventoryItem> Items { get; set; }
+        public List<InventoryItem> Items { get; set; }
+        public List<InventoryItem> EquipedItems { get { return Items.Where(item=>item.IsEquiped).ToList(); } }
+
 
         public Inventory()
         {
