@@ -15,13 +15,16 @@ namespace SpartaConsoleGame
         public int Price { get; set; }
         public bool IsEquiped { get; set; }
 
-        public InventoryItem(string name, string desc, int price, int atk = 0, int def = 0)
+        public ItemType Type { get; set; }
+
+        public InventoryItem(string name, string desc, int price, ItemType type, int atk = 0, int def = 0)
         {
             Name = name;
             Desc = desc;
             Price = price;
             Atk = atk;
             Def = def;
+            Type = type;
         }
 
         public string GetItemInfo()

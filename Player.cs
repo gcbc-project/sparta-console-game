@@ -22,6 +22,8 @@ namespace SpartaConsoleGame
 
         public int Gold { get; set; }
 
+        public Inventory Inventory { get; set; }
+
         public Player (string name, string job)
         {
             Name = name;
@@ -31,6 +33,8 @@ namespace SpartaConsoleGame
             Def = 5;
             Hp = 100;
             Gold = 1500;
+
+            Inventory = new Inventory ();
         }
 
         public string GetStatus()
