@@ -35,7 +35,7 @@ namespace SpartaConsoleGame
                 sb.Append("[E]");
             }
             sb.Append($"{Name}\t|");
-            if(Atk != 0)
+            if (Atk != 0)
             {
                 sb.Append($"공격력 {Atk}\t|");
             }
@@ -46,6 +46,11 @@ namespace SpartaConsoleGame
             sb.Append($"{Desc}");
 
             return sb.ToString();
+        }
+
+        public static explicit operator InventoryItem(ShopItem v)
+        {
+            return new InventoryItem(v.Name, v.Desc, v.Price, v.Type, v.Atk, v.Def);
         }
     }
 }
