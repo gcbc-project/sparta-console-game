@@ -22,13 +22,6 @@ namespace SpartaConsoleGame
 
         public ItemType Type { get; set; }
 
-<<<<<<< Updated upstream
         public string GetItemInfo();
     }
 }
-=======
-
-        public string GetItemInfo();
-    }
-}
->>>>>>> Stashed changes

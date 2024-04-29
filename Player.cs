@@ -18,22 +18,14 @@ namespace SpartaConsoleGame
         public int CalculateAtk { get => Atk + CalculateItemStat(ItemType.WEAPON); }
 
         public int Def { get; set; }
-<<<<<<< Updated upstream
-        public int CalculateDef { get => Def + CalculateItemStat(ItemType.AMOR); } 
-=======
         public int CalculateDef { get => Def + CalculateItemStat(ItemType.AMOR); }
->>>>>>> Stashed changes
         public int Hp { get; set; }
 
         public int Gold { get; set; }
 
         public Inventory Inventory { get; set; }
 
-<<<<<<< Updated upstream
-        public Player (string name, string job)
-=======
         public Player(string name, string job)
->>>>>>> Stashed changes
         {
             Name = name;
             Job = job;
@@ -43,11 +35,7 @@ namespace SpartaConsoleGame
             Hp = 100;
             Gold = 1500;
 
-<<<<<<< Updated upstream
-            Inventory = new Inventory ();
-=======
             Inventory = new Inventory();
->>>>>>> Stashed changes
         }
 
         public string GetStatus()
@@ -58,11 +46,7 @@ namespace SpartaConsoleGame
             sb.AppendLine($"Lv. {Level}");
             sb.AppendLine($"{Name} ( {Job} )");
             sb.Append($"공격력 : {Atk}");
-<<<<<<< Updated upstream
-            if(CItemAtk != 0)
-=======
             if (CItemAtk != 0)
->>>>>>> Stashed changes
             {
                 sb.Append($"(+{CItemAtk})");
             }
@@ -80,11 +64,7 @@ namespace SpartaConsoleGame
         private int CalculateItemStat(ItemType itemType)
         {
             int stat = 0;
-<<<<<<< Updated upstream
-            switch (itemType) 
-=======
             switch (itemType)
->>>>>>> Stashed changes
             {
                 case ItemType.WEAPON:
                     stat = Inventory.EquipedItems.Sum(item => item.Atk);
@@ -95,12 +75,6 @@ namespace SpartaConsoleGame
             }
             return stat;
         }
-<<<<<<< Updated upstream
-    }   
-
-}
-=======
     }
 
 }
->>>>>>> Stashed changes
