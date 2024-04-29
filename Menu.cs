@@ -78,11 +78,10 @@ namespace SpartaConsoleGame
             Console.Clear();
 
             Menu mainMenu = new Menu();
-            Player player = new Player("player.Name", "플레이어 직업");
             
             mainMenu.SetTitle("[스테이터스]");
 
-            player.GetStatus();
+            //player.GetStatus();
             
             mainMenu.Run();
         }
