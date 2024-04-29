@@ -21,7 +21,6 @@ namespace SpartaConsoleGame
             if (Items[index].Price <= player.Gold)
             {
                 Items[index].IsPurchased = true;
-                // player.Inventory.Items.Add((InventoryItem)Items[index]);
             }
         }
     }

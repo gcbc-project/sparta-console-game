@@ -35,6 +35,7 @@ namespace SpartaConsoleGame
                 sb.Append("[E]");
             }
             sb.Append($"{Name}\t|");
+
             if(Atk != 0)
             {
                 sb.Append($"공격력 {Atk}\t|");
@@ -48,4 +49,5 @@ namespace SpartaConsoleGame
             return sb.ToString();
         }
     }
+
 }

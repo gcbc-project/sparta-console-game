@@ -9,7 +9,11 @@ namespace SpartaConsoleGame
     internal class Inventory
     {
         public List<InventoryItem> Items { get; set; }
+<<<<<<< Updated upstream
         public List<InventoryItem> EquipedItems { get { return Items.Where(item=>item.IsEquiped).ToList(); } }
+=======
+        public List<InventoryItem> EquipedItems { get { return Items.Where(item => item.IsEquiped).ToList(); } }
+>>>>>>> Stashed changes
 
 
         public Inventory()
@@ -22,4 +26,8 @@ namespace SpartaConsoleGame
             Items[index].IsEquiped = !Items[index].IsEquiped;
         }
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
