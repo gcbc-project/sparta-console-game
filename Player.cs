@@ -33,7 +33,7 @@ namespace SpartaConsoleGame
             Atk = 10;
             Def = 5;
             Hp = 100;
-            Gold = 1500;
+            Gold = 10000;
 
             Inventory = new Inventory ();
         }

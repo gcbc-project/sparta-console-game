@@ -17,6 +17,13 @@ namespace SpartaConsoleGame
             Items = new List<InventoryItem>();
         }
 
+        public string GetItemsInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+            Items.ForEach(item => {sb.AppendLine(item.GetItemInfo());});
+            return sb.ToString();
+        }
+
         public void EquipedItem(int index)
         {
             Items[index].IsEquiped = !Items[index].IsEquiped;

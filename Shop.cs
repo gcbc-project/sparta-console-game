@@ -16,6 +16,13 @@ namespace SpartaConsoleGame
             Items = new List<ShopItem>();
         }
 
+        public string GetItemsInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+            Items.ForEach(item => { sb.AppendLine(item.GetItemInfo()); });
+            return sb.ToString();
+        }
+
         public void Buy(Player player, int index)
         {
             if (Items[index].Price <= player.Gold)
@@ -28,6 +35,7 @@ namespace SpartaConsoleGame
             {
                 Console.WriteLine("Gold 가 부족합니다.");
             }
+            Console.ReadKey();
         }
     }
 }

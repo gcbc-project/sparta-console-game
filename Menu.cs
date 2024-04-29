@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 using SpartaConsoleGame;
 
 namespace SpartaConsoleGame
@@ -22,6 +24,7 @@ namespace SpartaConsoleGame
         public string Title { get; private set; }
         public string Description { get; private set; }
         public string Info { get; private set; }
+
         private List<MenuItem> menuItems;
 
 
@@ -43,6 +46,7 @@ namespace SpartaConsoleGame
         public void SetInfo(string info)
         {
             Info = info;
+            
         }
 
         public void AddMenuItem(string option, Action action)
@@ -60,16 +64,14 @@ namespace SpartaConsoleGame
             {
                 Console.WriteLine($"{i + 1}. {menuItems[i].Label}");
             }
+            
+            Console.WriteLine("\n0. 나가기");
+            
         }
 
+      
 
-        // 메인 화면
 
-        //인벤토리 콜백
-
-        //샵 콜백
-
-        //입력창
         public int HandleChoice()
         {
 
