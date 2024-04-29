@@ -19,6 +19,11 @@ namespace SpartaConsoleGame
 
         public void EquipedItem(int index)
         {
+            InventoryItem? findItem = Items.Find(item => item.IsEquiped && Items[index].Type == item.Type);
+            if(findItem != null)
+            {
+                findItem.IsEquiped = false;
+            }
             Items[index].IsEquiped = !Items[index].IsEquiped;
         }
     }
