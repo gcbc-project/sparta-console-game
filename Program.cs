@@ -52,7 +52,7 @@ internal class Program
 
 
         mainMenu.SetTitle("[스테이터스]");
-        mainMenu.SetInfo(player.GetStatus());
+        mainMenu.SetInfo(player.GetStatus);
 
         mainMenu.Run();
     }
@@ -71,7 +71,7 @@ internal class Program
                 //장착하라는 숫자 입력
             }
         });
-        mainMenu.SetInfo(player.Inventory.GetItemsInfo());
+        mainMenu.SetInfo(player.Inventory.GetItemsInfo);
 
         mainMenu.Run();
     }
@@ -81,11 +81,12 @@ internal class Program
         Console.Clear();
         Menu mainMenu = new Menu();
 
-
         mainMenu.SetTitle("[상점]");
         mainMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.\n[보유 골드]: {player.Gold} G\n");
-        mainMenu.SetInfo(shop.GetItemsInfo());
+        mainMenu.SetInfo(shop.GetItemsInfo);
+        
         mainMenu.AddMenuItem("아이템 구매", BuyMenu);
+        
 
 
         mainMenu.Run();

@@ -18,12 +18,12 @@ namespace SpartaConsoleGame
             Label = label; Action = action;
         }
     }
-
+    
     internal class Menu
     {
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public string Info { get; private set; }
+        public Func<string> Info { get; private set; }
 
         public Action RefreshMenu { get; private set; }
 
@@ -34,12 +34,13 @@ namespace SpartaConsoleGame
         {
             menuItems = new List<MenuItem>();
         }
-        public void SetRefreshMenu(Action refreshMenu)
+
+        public void SetRefreshMenu(Action refreshMenu) 
         {
-            RefreshMenu = () =>
-            {
-                menuItems.Clear();
-                refreshMenu();
+            RefreshMenu = () => 
+            { 
+                menuItems.Clear(); 
+                refreshMenu(); 
             };
         }
         public void SetTitle(string title)
@@ -52,10 +53,10 @@ namespace SpartaConsoleGame
             Description = desc;
         }
 
-        public void SetInfo(string info)
+        public void SetInfo(Func<string> info)
         {
             Info = info;
-
+            
         }
 
         public void AddMenuItem(string option, Action action)
@@ -68,14 +69,17 @@ namespace SpartaConsoleGame
         {
             Console.WriteLine(Title);
             Console.WriteLine(Description);
-            Console.WriteLine(Info);
+            if (Info != null)
+            { 
+                Console.WriteLine(Info());            
+            }
             for (int i = 0; i < menuItems.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {menuItems[i].Label}");
             }
-
+            
             Console.WriteLine("\n0. 나가기");
-
+            
         }
 
 
@@ -109,7 +113,7 @@ namespace SpartaConsoleGame
                     RefreshMenu();
                 }
                 Display();
-
+                
                 int choice = HandleChoice();
                 if (choice > 0)
                 {
