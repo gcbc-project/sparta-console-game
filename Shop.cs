@@ -30,6 +30,7 @@ namespace SpartaConsoleGame
                 Items[shopItemindex].IsPurchased = true;
                 player.Inventory.Items.Add((InventoryItem)Items[shopItemindex]);
                 player.Gold -= Items[shopItemindex].Price;
+              
                 Console.WriteLine("구매를 완료했습니다.");
             }
             else
@@ -45,6 +46,7 @@ namespace SpartaConsoleGame
             player.Inventory.Items.RemoveAt(inventoryItemindex);
             player.Gold += sellItemPrice;
             Console.WriteLine($"{sellItemPrice}G에 판매를 완료했습니다.");
+            Thread.Sleep(500);
         }
     }
 }
