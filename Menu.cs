@@ -96,7 +96,7 @@ namespace SpartaConsoleGame
             else
             {
                 Console.WriteLine("유효하지 않은 선택입니다. 다시 시도해주세요.");
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
                 return -1;
             }
 
