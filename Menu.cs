@@ -79,7 +79,6 @@ namespace SpartaConsoleGame
             }
             
             Console.WriteLine("\n0. 나가기");
-            
         }
 
 

@@ -14,22 +14,9 @@ internal class Program
 
         mainMenu.SetDesc("스파르타 마을에 오신 것을 환영합니다! \n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.");
 
-        mainMenu.AddMenuItem("상태보기", () =>
-        {
-            SatusMenu();
-        });
-        mainMenu.AddMenuItem("인벤토리", () =>
-        {
-            Console.WriteLine("Test");
-            Console.ReadKey();
-            InvenMenu();
-        });
-        mainMenu.AddMenuItem("상점", () =>
-        {
-            Console.WriteLine("Test");
-            Console.ReadKey();
-            ShopMenu();
-        });
+        mainMenu.AddMenuItem("상태보기",SatusMenu);
+        mainMenu.AddMenuItem("인벤토리", InvenMenu);
+        mainMenu.AddMenuItem("상점", ShopMenu);
         mainMenu.Run();
     }
 
@@ -64,15 +51,36 @@ internal class Program
         Menu mainMenu = new Menu();
 
         mainMenu.SetTitle("[인벤토리]");
-        mainMenu.AddMenuItem("장착관리", () =>
-        {
+        mainMenu.SetInfo(player.Inventory.GetItemsInfo);
+        mainMenu.AddMenuItem("장착관리", EquipMenu);
+
+        mainMenu.Run();
+    }
+    
+    public static void EquipMenu()
+    {
+         Console.Clear();
+
+        Menu mainMenu = new Menu();
+
+        mainMenu.SetTitle("[인벤토리]");
             if (player.Inventory.Items.Count > 0)
             {
-                //장착하라는 숫자 입력
-            }
-        });
-        mainMenu.SetInfo(player.Inventory.GetItemsInfo);
+                mainMenu.SetRefreshMenu(() =>
+                {
+                    for (int i = 0; i < player.Inventory.Items.Count; i++)
+                    {
+                        int index = i;
+                        mainMenu.AddMenuItem(player.Inventory.Items[index].GetItemInfo(), () => { player.Inventory.EquipedItem(index); });
 
+                    }
+                });
+            }
+            else
+            {
+                Console.WriteLine("인벤토리가 비었습니다.");
+                Thread.Sleep(1000);
+            }
         mainMenu.Run();
     }
 
@@ -86,8 +94,6 @@ internal class Program
         mainMenu.SetInfo(shop.GetItemsInfo);
         
         mainMenu.AddMenuItem("아이템 구매", BuyMenu);
-        
-
 
         mainMenu.Run();
     }
