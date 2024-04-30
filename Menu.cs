@@ -25,6 +25,8 @@ namespace SpartaConsoleGame
         public string Description { get; private set; }
         public string Info { get; private set; }
 
+        public Action RefreshMenu { get; private set; }
+
         private List<MenuItem> menuItems;
 
 
@@ -32,7 +34,14 @@ namespace SpartaConsoleGame
         {
             menuItems = new List<MenuItem>();
         }
-
+        public void SetRefreshMenu(Action refreshMenu)
+        {
+            RefreshMenu = () =>
+            {
+                menuItems.Clear();
+                refreshMenu();
+            };
+        }
         public void SetTitle(string title)
         {
             Title = title;
@@ -46,7 +55,7 @@ namespace SpartaConsoleGame
         public void SetInfo(string info)
         {
             Info = info;
-            
+
         }
 
         public void AddMenuItem(string option, Action action)
@@ -64,12 +73,10 @@ namespace SpartaConsoleGame
             {
                 Console.WriteLine($"{i + 1}. {menuItems[i].Label}");
             }
-            
-            Console.WriteLine("\n0. 나가기");
-            
-        }
 
-      
+            Console.WriteLine("\n0. 나가기");
+
+        }
 
 
         public int HandleChoice()
@@ -97,8 +104,12 @@ namespace SpartaConsoleGame
             while (true)
             {
                 Console.Clear();
-
+                if (RefreshMenu != null)
+                {
+                    RefreshMenu();
+                }
                 Display();
+
                 int choice = HandleChoice();
                 if (choice > 0)
                 {
