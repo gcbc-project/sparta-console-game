@@ -12,9 +12,9 @@ internal class Program
         InitGame();
         Menu mainMenu = new Menu();
 
-        mainMenu.SetDesc("스파르타 마을에 오신 것을 환영합니다! \n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.");
+        mainMenu.SetDesc("스파르타 마을에 오신 것을 환영합니다! \n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n");
 
-        mainMenu.AddMenuItem("상태보기",StatusMenu);
+        mainMenu.AddMenuItem("상태보기", StatusMenu);
         mainMenu.AddMenuItem("인벤토리", InvenMenu);
         mainMenu.AddMenuItem("상점", ShopMenu);
         mainMenu.Run();
@@ -56,7 +56,7 @@ internal class Program
 
             if (player.Inventory.Items.Count == 0)
             {
-                return "인벤토리가 비었습니다";
+                return "인벤토리가 비었습니다\n";
             }
             else
             {
@@ -101,11 +101,12 @@ internal class Program
         Console.Clear();
         Menu shopMenu = new Menu();
 
-        shopMenu.SetTitle("[상점]");
-        shopMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.\n[보유 골드]: {player.Gold} G\n");
-        shopMenu.SetInfo(shop.GetItemsInfo);
+        shopMenu.SetTitle("[상점]\n");
+        shopMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.\n");
+        shopMenu.SetInfo(() => player.GetGold() + shop.GetItemsInfo());
 
         shopMenu.AddMenuItem("아이템 구매", BuyMenu);
+        shopMenu.AddMenuItem("아이템 판매", SellMenu);
 
         shopMenu.Run();
     }
@@ -123,9 +124,28 @@ internal class Program
 
             }
         });
-        buyMenu.SetTitle("[상점 - 아이템 구매]");
-        buyMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.\n[보유 골드]: {player.Gold} G\n");
+        buyMenu.SetTitle("[상점 - 아이템 구매]\n");
+        buyMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.");
+        buyMenu.SetInfo(player.GetGold); 
 
         buyMenu.Run();
+    }
+
+    public static void SellMenu()
+    {
+        Console.Clear();
+        Menu sellMenu = new Menu();
+        sellMenu.SetRefreshMenu(() =>
+        {
+            for (int i = 0; i < player.Inventory.Items.Count; i++)
+            {
+                int index = i;
+                sellMenu.AddMenuItem(player.Inventory.Items[index].GetItemInfo(), () => { shop.Sell(player, index); });
+            }
+        });
+        sellMenu.SetTitle("[상점 - 아이템 판매]\n");
+        sellMenu.SetDesc($"보유한 아이템을 팔 수 있는 상점입니다.\n");
+        sellMenu.SetInfo(player.GetGold);
+        sellMenu.Run();
     }
 }

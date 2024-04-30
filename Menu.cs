@@ -56,7 +56,6 @@ namespace SpartaConsoleGame
         public void SetInfo(Func<string> info)
         {
             Info = info;
-            
         }
 
         public void AddMenuItem(string option, Action action)
@@ -80,7 +79,6 @@ namespace SpartaConsoleGame
             
             Console.WriteLine("\n0. 나가기");
         }
-
 
         public int HandleChoice()
         {

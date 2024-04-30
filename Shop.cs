@@ -29,6 +29,7 @@ namespace SpartaConsoleGame
             {
                 Items[index].IsPurchased = true;
                 player.Inventory.Items.Add((InventoryItem)Items[index]);
+                player.Gold -= Items[index].Price;
                 Console.WriteLine("구매를 완료했습니다.");
             }
             else
@@ -39,10 +40,12 @@ namespace SpartaConsoleGame
         }
         public void Sell(Player player, int index)
         {
+            int sellItemPrice = Convert.ToInt32(Math.Round(Items[index].Price * 0.85f));
             Items[index].IsPurchased = false;
-            player.Inventory.Items.Remove((InventoryItem)Items[index]);
-            player.Gold += Convert.ToInt32(Math.Round(Items[index].Price * 0.85f));
-            Console.WriteLine("판매를 완료했습니다.");
+            player.Inventory.Items.RemoveAt(index);
+            player.Gold += sellItemPrice;
+            Console.WriteLine($"{sellItemPrice}G에 판매를 완료했습니다.");
+            Thread.Sleep(500);
         }
     }
 }

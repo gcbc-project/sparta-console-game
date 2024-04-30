@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,7 +37,7 @@ namespace SpartaConsoleGame
             Gold = 10000;
 
             Inventory = new Inventory();
-        }
+        }  
 
         public string GetStatus()
         {
@@ -58,6 +59,14 @@ namespace SpartaConsoleGame
             sb.AppendLine($"\n체  력 : {Hp}");
             sb.AppendLine($"Gold : {Gold} G");
 
+            return sb.ToString();
+        }
+
+        public string GetGold()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"[보유 골드] : {Gold} G\n");
+            
             return sb.ToString();
         }
 
