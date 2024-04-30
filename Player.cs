@@ -18,14 +18,14 @@ namespace SpartaConsoleGame
         public int CalculateAtk { get => Atk + CalculateItemStat(ItemType.WEAPON); }
 
         public int Def { get; set; }
-        public int CalculateDef { get => Def + CalculateItemStat(ItemType.AMOR); } 
+        public int CalculateDef { get => Def + CalculateItemStat(ItemType.AMOR); }
         public int Hp { get; set; }
 
         public int Gold { get; set; }
 
         public Inventory Inventory { get; set; }
 
-        public Player (string name, string job)
+        public Player(string name, string job)
         {
             Name = name;
             Job = job;
@@ -35,7 +35,7 @@ namespace SpartaConsoleGame
             Hp = 100;
             Gold = 10000;
 
-            Inventory = new Inventory ();
+            Inventory = new Inventory();
         }
 
         public string GetStatus()
@@ -46,7 +46,7 @@ namespace SpartaConsoleGame
             sb.AppendLine($"Lv. {Level}");
             sb.AppendLine($"{Name} ( {Job} )");
             sb.Append($"공격력 : {Atk}");
-            if(CItemAtk != 0)
+            if (CItemAtk != 0)
             {
                 sb.Append($"(+{CItemAtk})");
             }
@@ -64,7 +64,7 @@ namespace SpartaConsoleGame
         private int CalculateItemStat(ItemType itemType)
         {
             int stat = 0;
-            switch (itemType) 
+            switch (itemType)
             {
                 case ItemType.WEAPON:
                     stat = Inventory.EquipedItems.Sum(item => item.Atk);
@@ -75,6 +75,6 @@ namespace SpartaConsoleGame
             }
             return stat;
         }
-    }   
+    }
 
 }

@@ -37,5 +37,12 @@ namespace SpartaConsoleGame
             }
             Console.ReadKey();
         }
+        public void Sell(Player player, int index)
+        {
+            Items[index].IsPurchased = false;
+            player.Inventory.Items.Remove((InventoryItem)Items[index]);
+            player.Gold += Convert.ToInt32(Math.Round(Items[index].Price * 0.85f));
+            Console.WriteLine("판매를 완료했습니다.");
+        }
     }
 }
