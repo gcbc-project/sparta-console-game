@@ -15,11 +15,16 @@ namespace SpartaConsoleGame
         public string Title { get; set; }
 
 
-        public Dungeon(string title, int recommendDef, int basicReward)
+        // 경험치 리워드
+        public float ExpReward { get; set; }
+        
+
+        public Dungeon(string title, int recommendDef, int basicReward, float expReward)
         {
             Title = title;
             RecommendDef = recommendDef;
             BasicReward = basicReward;
+            ExpReward = expReward;
         }
 
         public string GetDungeonInfo()
