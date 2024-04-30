@@ -5,7 +5,7 @@ using System.Reflection;
 
 internal class Program
 {
-    static Player player = new Player("르탄", "전사");
+    static Player player = new Player("르탄", "전사",100, 0);
     static Shop shop = new Shop();
     static DungeonManager dungeonManager = new DungeonManager();
 
@@ -21,6 +21,7 @@ internal class Program
         mainMenu.AddMenuItem("인벤토리", InvenMenu);
         mainMenu.AddMenuItem("상점", ShopMenu);
         mainMenu.AddMenuItem("던전 입장", DungeonMenu);
+        mainMenu.AddMenuItem("휴식하기", RestMenu);
 
         mainMenu.Run();
     }
@@ -37,9 +38,9 @@ internal class Program
         shop.Items.Add(new ShopItem("광선검", "제다이 전사들이 사용하던 검입니다.", 5000, ItemType.WEAPON, atk: 15));
 
         dungeonManager = new DungeonManager();
-        dungeonManager.DungeonList.Add(new Dungeon("쉬운", 5, 1000));
-        dungeonManager.DungeonList.Add(new Dungeon("일반", 11, 1700));
-        dungeonManager.DungeonList.Add(new Dungeon("어려운", 17, 2500));
+        dungeonManager.DungeonList.Add(new Dungeon("쉬운", 5, 1000, 50));
+        dungeonManager.DungeonList.Add(new Dungeon("일반", 11, 1700, 75));
+        dungeonManager.DungeonList.Add(new Dungeon("어려운", 17, 2500, 100));
     }
 
     public static void StatusMenu()
@@ -184,5 +185,18 @@ internal class Program
 
         dungeonClearMenu.SetInfo(() => dungeonManager.Enter(player, index));
         dungeonClearMenu.Run();
+    }
+
+    public static void RestMenu()
+    {
+        Console.Clear();
+        Menu restMenu = new Menu();
+        restMenu.SetTitle("[휴식하기]");
+        restMenu.SetDesc("500 G 를 내면 체력을 회복할 수 있습니다.");
+        restMenu.SetInfo(player.GetGold);
+
+        restMenu.AddMenuItem("휴식하기", () => player.Rest());
+
+        restMenu.Run();
     }
 }
