@@ -54,6 +54,7 @@ namespace SpartaConsoleGame
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Lv. {Level}");
             sb.AppendLine($"{Name} ( {Job} )");
+            sb.AppendLine($"EXP ({NowExpStorage} / {MaxExpStorage.ToString("N2")})");
             sb.Append($"공격력 : {Atk}");
             if (CItemAtk != 0)
             {
@@ -104,10 +105,11 @@ namespace SpartaConsoleGame
         private void LevelUp()
         {
             float remainExp = NowExpStorage - MaxExpStorage;
+            Level++;
             Def += 1;
             Atk += 2;
-            MaxExpStorage *= 1.05f;
-            NowExpStorage += remainExp;
+            MaxExpStorage = (float)Math.Round((double)(MaxExpStorage * 1.05f));
+            NowExpStorage = remainExp;
         }
 
         private int CalculateItemStat(ItemType itemType)
