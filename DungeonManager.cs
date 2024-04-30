@@ -25,7 +25,8 @@ namespace SpartaConsoleGame
             
             if(player.CalculateDef < DungeonList[index].RecommendDef && random.Next(0, 10) < 4)
             {
-                sb.AppendLine($"{DungeonList[index].Title}을 클리어하지 못했습니다.");
+                sb.AppendLine("아쉽습니다..");
+                sb.AppendLine($"{DungeonList[index].Title}던전 을 클리어하지 못했습니다.");
                 sb.AppendLine("\n[탐험 결과]");
                 sb.AppendLine($"체력 {player.Hp} -> {player.Hp / 2}");
                 player.Hp /= 2;
@@ -37,7 +38,8 @@ namespace SpartaConsoleGame
                 int extraRewardPer = random.Next(player.CalculateAtk, player.CalculateAtk * 2);
                 int extraReward = (int)(DungeonList[index].BasicReward * (extraRewardPer / 100.0f));
                 int totalReward = DungeonList[index].BasicReward + extraReward;
-                sb.AppendLine($"{DungeonList[index].Title}을 클리어하였습니다.");
+                sb.AppendLine("축하드립니다!");
+                sb.AppendLine($"{DungeonList[index].Title}던전 을 클리어하였습니다.");
                 sb.AppendLine("\n[탐험 결과]");
                 sb.AppendLine($"체력 {player.Hp} -> {player.Hp - baseHpLoss}");
                 sb.AppendLine($"Gold {player.Gold} -> {player.Gold + totalReward}");

@@ -1,11 +1,14 @@
 ﻿using SpartaConsoleGame;
 using System;
+using System.Numerics;
 using System.Reflection;
 
 internal class Program
 {
     static Player player = new Player("르탄", "전사");
     static Shop shop = new Shop();
+    static DungeonManager dungeonManager = new DungeonManager();
+
 
     private static void Main(string[] args)
     {
@@ -17,6 +20,8 @@ internal class Program
         mainMenu.AddMenuItem("상태보기", StatusMenu);
         mainMenu.AddMenuItem("인벤토리", InvenMenu);
         mainMenu.AddMenuItem("상점", ShopMenu);
+        mainMenu.AddMenuItem("던전 입장", DungeonMenu);
+
         mainMenu.Run();
     }
 
@@ -30,6 +35,11 @@ internal class Program
         shop.Items.Add(new ShopItem("청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 1500, ItemType.WEAPON, atk: 5));
         shop.Items.Add(new ShopItem("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 3000, ItemType.WEAPON, atk: 7));
         shop.Items.Add(new ShopItem("광선검", "제다이 전사들이 사용하던 검입니다.", 5000, ItemType.WEAPON, atk: 15));
+
+        dungeonManager = new DungeonManager();
+        dungeonManager.DungeonList.Add(new Dungeon("쉬운", 5, 1000));
+        dungeonManager.DungeonList.Add(new Dungeon("일반", 11, 1700));
+        dungeonManager.DungeonList.Add(new Dungeon("어려운", 17, 2500));
     }
 
     public static void StatusMenu()
@@ -52,7 +62,8 @@ internal class Program
 
         invenMenu.SetTitle("[인벤토리]");
         invenMenu.SetInfo(player.Inventory.GetItemsInfo);
-        invenMenu.SetInfo(() => {
+        invenMenu.SetInfo(() =>
+        {
 
             if (player.Inventory.Items.Count == 0)
             {
@@ -67,10 +78,10 @@ internal class Program
 
         invenMenu.Run();
     }
-    
+
     public static void EquipMenu()
     {
-         Console.Clear();
+        Console.Clear();
 
         Menu equipMenu = new Menu();
 
@@ -84,7 +95,8 @@ internal class Program
 
             }
         });
-        equipMenu.SetInfo(() => {
+        equipMenu.SetInfo(() =>
+        {
             if (player.Inventory.Items.Count == 0)
             {
                 return "인벤토리이 비었습니다";
@@ -115,6 +127,9 @@ internal class Program
     {
         Console.Clear();
         Menu buyMenu = new Menu();
+        buyMenu.SetTitle("[상점 - 아이템 구매]\n");
+        buyMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.");
+        buyMenu.SetInfo(player.GetGold);
         buyMenu.SetRefreshMenu(() =>
         {
             for (int i = 0; i < shop.Items.Count; i++)
@@ -124,9 +139,6 @@ internal class Program
 
             }
         });
-        buyMenu.SetTitle("[상점 - 아이템 구매]\n");
-        buyMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.");
-        buyMenu.SetInfo(player.GetGold); 
 
         buyMenu.Run();
     }
@@ -135,6 +147,9 @@ internal class Program
     {
         Console.Clear();
         Menu sellMenu = new Menu();
+        sellMenu.SetTitle("[상점 - 아이템 판매]\n");
+        sellMenu.SetDesc($"보유한 아이템을 팔 수 있는 상점입니다.\n");
+        sellMenu.SetInfo(player.GetGold);
         sellMenu.SetRefreshMenu(() =>
         {
             for (int i = 0; i < player.Inventory.Items.Count; i++)
@@ -143,9 +158,31 @@ internal class Program
                 sellMenu.AddMenuItem(player.Inventory.Items[index].GetItemInfo(), () => { shop.Sell(player, index); });
             }
         });
-        sellMenu.SetTitle("[상점 - 아이템 판매]\n");
-        sellMenu.SetDesc($"보유한 아이템을 팔 수 있는 상점입니다.\n");
-        sellMenu.SetInfo(player.GetGold);
         sellMenu.Run();
+    }
+
+    public static void DungeonMenu()
+    {
+        Console.Clear();
+        Menu dungeonMenu = new Menu();
+        dungeonMenu.SetTitle("[던전 입장]\n");
+        dungeonMenu.SetDesc("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+        for (int i = 0; i < dungeonManager.DungeonList.Count; i++)
+        {
+            int index = i;
+            dungeonMenu.AddMenuItem(dungeonManager.DungeonList[index].GetDungeonInfo(), () => DungeonResultMenu(index));
+        }
+
+        dungeonMenu.Run();
+    }
+
+    public static void DungeonResultMenu(int index)
+    {
+        Console.Clear();
+        Menu dungeonClearMenu = new Menu();
+        dungeonClearMenu.SetTitle("[던전 클리어]\n");
+
+        dungeonClearMenu.SetInfo(() => dungeonManager.Enter(player, index));
+        dungeonClearMenu.Run();
     }
 }
