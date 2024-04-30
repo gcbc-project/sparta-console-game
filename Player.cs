@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,9 +25,15 @@ namespace SpartaConsoleGame
 
         public int Gold { get; set; }
 
+        //맥스 경험치 통
+        public float MaxExpStorage { get; set; }
+        //현재 경험치 통
+        public float NowExpStorage { get; set; }
+
+
         public Inventory Inventory { get; set; }
 
-        public Player(string name, string job)
+        public Player(string name, string job, float maxExpStorage, float nowExpStorage)
         {
             Name = name;
             Job = job;
@@ -35,9 +42,10 @@ namespace SpartaConsoleGame
             Def = 5;
             Hp = 100;
             Gold = 10000;
-
+            MaxExpStorage = maxExpStorage;
+            NowExpStorage = nowExpStorage;
             Inventory = new Inventory();
-        }  
+        }
 
         public string GetStatus()
         {
@@ -66,8 +74,40 @@ namespace SpartaConsoleGame
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"[보유 골드] : {Gold} G\n");
-            
+
             return sb.ToString();
+        }
+        public string Rest()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (Gold > 500 && Hp < 100)
+            {
+                //휴식 하기
+                Hp = 100;
+                sb.AppendLine($"휴식 완료");
+            }
+            else
+            {
+                //쫒아내기
+                sb.AppendLine($"돈이 없습니다");
+            }
+            return sb.ToString();
+        }
+        public void ExpUp(float expReward)
+        {
+            NowExpStorage += expReward;
+            if (MaxExpStorage <=NowExpStorage)
+            {
+                LevelUp();
+            }
+        }
+        private void LevelUp()
+        {
+            float remainExp = NowExpStorage - MaxExpStorage;
+            Def += 1;
+            Atk += 2;
+            MaxExpStorage *= 1.05f;
+            NowExpStorage += remainExp;
         }
 
         private int CalculateItemStat(ItemType itemType)

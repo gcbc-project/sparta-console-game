@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,16 +15,17 @@ namespace SpartaConsoleGame
         public Random random = new Random();
 
         public DungeonManager()
-        { 
+        {
             DungeonList = new List<Dungeon>();
         }
 
-        public string Enter(Player player,int index)
+
+        public string Enter(Player player, int index)
         {
             StringBuilder sb = new StringBuilder();
             // Hp와 관련된 정의
-            
-            if(player.CalculateDef < DungeonList[index].RecommendDef && random.Next(0, 10) < 4)
+
+            if (player.CalculateDef < DungeonList[index].RecommendDef && random.Next(0, 10) < 4)
             {
                 sb.AppendLine("아쉽습니다..");
                 sb.AppendLine($"{DungeonList[index].Title}던전 을 클리어하지 못했습니다.");
@@ -45,8 +47,11 @@ namespace SpartaConsoleGame
                 sb.AppendLine($"Gold {player.Gold} -> {player.Gold + totalReward}");
                 player.Hp -= baseHpLoss;
                 player.Gold += totalReward;
+                player.ExpUp(DungeonList[index].ExpReward);   
             }
             return sb.ToString();
         }
+
+
     }
 }
