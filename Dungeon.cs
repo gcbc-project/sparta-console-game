@@ -67,7 +67,10 @@ namespace SpartaConsoleGame
                     menu.AddMenuItem(enemy.GetEnemyInfo(), () =>
                     {
                         AttackTurn(player, enemy);
-                        AttackTurn(enemy, player);
+                        SelectEnemyList.Where(e => !e.IsDead).ToList().ForEach((e) =>
+                        {
+                            AttackTurn(e, player);
+                        });
                     });
                 }
             });
