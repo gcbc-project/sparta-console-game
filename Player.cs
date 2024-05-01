@@ -11,26 +11,16 @@ namespace SpartaConsoleGame
     internal class Player
     {
         public string Name { get; set; }
-
         public string Job { get; set; }
-
         public int Level { get; set; }
-
         public int Attack { get; set; }
         public int CalculateAttack { get => Attack + CalculateItemStat(ItemType.Weapon); }
-
         public int Defense { get; set; }
         public int CalculateDefense { get => Defense + CalculateItemStat(ItemType.Armor); }
         public int Hp { get; set; }
-
         public int Gold { get; set; }
-
-        //맥스 경험치 통
         public float MaxExpStorage { get; set; }
-        //현재 경험치 통
         public float NowExpStorage { get; set; }
-
-
         public Inventory Inventory { get; set; }
 
         public Player(string name, string job, float maxExpStorage, float nowExpStorage)
@@ -86,12 +76,16 @@ namespace SpartaConsoleGame
                 Gold -= 500;
                 //휴식 하기
                 Hp = 100;
-                sb.AppendLine($"휴식 완료");
+                sb.AppendLine($"\n휴식 완료");
+            }
+            else if (Gold >= 500 && Hp ==100 )
+            {
+                sb.AppendLine($"\n이미 최대체력입니다.");
             }
             else
             {
                 //쫒아내기
-                sb.AppendLine($"돈이 없습니다");
+                sb.AppendLine($"\n돈이 없습니다");
             }
             return sb.ToString();
         }
