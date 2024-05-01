@@ -81,8 +81,9 @@ namespace SpartaConsoleGame
         public string Rest()
         {
             StringBuilder sb = new StringBuilder();
-            if (Gold > 500 && Hp < 100)
+            if (Gold >= 500 && Hp < 100)
             {
+                Gold -= 500;
                 //휴식 하기
                 Hp = 100;
                 sb.AppendLine($"휴식 완료");
