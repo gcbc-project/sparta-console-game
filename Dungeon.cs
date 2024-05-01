@@ -8,21 +8,16 @@ namespace SpartaConsoleGame
 {
     internal class Dungeon
     {
-        public int RecommendDef { get; set; }
-
-        public int BasicReward { get; set; }
-
         public string Title { get; set; }
-
-
-        // 경험치 리워드
+        public int RecommendDefense { get; set; }
+        public int BasicReward { get; set; }
         public float ExpReward { get; set; }
-        
 
-        public Dungeon(string title, int recommendDef, int basicReward, float expReward)
+
+        public Dungeon(string title, int recommendDefense, int basicReward, float expReward)
         {
             Title = title;
-            RecommendDef = recommendDef;
+            RecommendDefense = recommendDefense;
             BasicReward = basicReward;
             ExpReward = expReward;
         }
@@ -30,9 +25,9 @@ namespace SpartaConsoleGame
         public string GetDungeonInfo()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{Title} 던전 \t| 방어력 : {RecommendDef} 이상 권장");
+            sb.Append($"{Title} 던전 \t| 방어력 : {RecommendDefense} 이상 권장");
 
             return sb.ToString();
         }
-    }  
+    }
 }

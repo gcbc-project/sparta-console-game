@@ -16,11 +16,11 @@ namespace SpartaConsoleGame
 
         public int Level { get; set; }
 
-        public int Atk { get; set; }
-        public int CalculateAtk { get => Atk + CalculateItemStat(ItemType.WEAPON); }
+        public int Attack { get; set; }
+        public int CalculateAttack { get => Attack + CalculateItemStat(ItemType.Weapon); }
 
-        public int Def { get; set; }
-        public int CalculateDef { get => Def + CalculateItemStat(ItemType.AMOR); }
+        public int Defense { get; set; }
+        public int CalculateDefense { get => Defense + CalculateItemStat(ItemType.Armor); }
         public int Hp { get; set; }
 
         public int Gold { get; set; }
@@ -38,8 +38,8 @@ namespace SpartaConsoleGame
             Name = name;
             Job = job;
             Level = 1;
-            Atk = 10;
-            Def = 5;
+            Attack = 10;
+            Defense = 5;
             Hp = 100;
             Gold = 10000;
             MaxExpStorage = maxExpStorage;
@@ -49,21 +49,21 @@ namespace SpartaConsoleGame
 
         public string GetStatus()
         {
-            int CItemAtk = CalculateItemStat(ItemType.WEAPON);
-            int CItemDef = CalculateItemStat(ItemType.AMOR);
+            int calculateItemAtk = CalculateItemStat(ItemType.Weapon);
+            int calculateItemDef = CalculateItemStat(ItemType.Armor);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Lv. {Level}");
             sb.AppendLine($"{Name} ( {Job} )");
             sb.AppendLine($"EXP ({NowExpStorage} / {MaxExpStorage.ToString("N2")})");
-            sb.Append($"공격력 : {Atk}");
-            if (CItemAtk != 0)
+            sb.Append($"공격력 : {Attack}");
+            if (calculateItemAtk != 0)
             {
-                sb.Append($"(+{CItemAtk})");
+                sb.Append($"(+{calculateItemAtk})");
             }
-            sb.Append($"\n방어력 : {Def}");
-            if (CItemDef != 0)
+            sb.Append($"\n방어력 : {Defense}");
+            if (calculateItemDef != 0)
             {
-                sb.Append($"(+{CItemDef})");
+                sb.Append($"(+{calculateItemDef})");
             }
             sb.AppendLine($"\n체  력 : {Hp}");
             sb.AppendLine($"Gold : {Gold} G");
@@ -97,7 +97,7 @@ namespace SpartaConsoleGame
         public void ExpUp(float expReward)
         {
             NowExpStorage += expReward;
-            if (MaxExpStorage <=NowExpStorage)
+            if (MaxExpStorage <= NowExpStorage)
             {
                 LevelUp();
             }
@@ -106,8 +106,8 @@ namespace SpartaConsoleGame
         {
             float remainExp = NowExpStorage - MaxExpStorage;
             Level++;
-            Def += 1;
-            Atk += 2;
+            Defense += 1;
+            Attack += 2;
             MaxExpStorage = (float)Math.Round((double)(MaxExpStorage * 1.05f));
             NowExpStorage = remainExp;
         }
@@ -117,11 +117,11 @@ namespace SpartaConsoleGame
             int stat = 0;
             switch (itemType)
             {
-                case ItemType.WEAPON:
-                    stat = Inventory.EquipedItems.Sum(item => item.Atk);
+                case ItemType.Weapon:
+                    stat = Inventory.EquipedItems.Sum(item => item.Attack);
                     break;
-                case ItemType.AMOR:
-                    stat = Inventory.EquipedItems.Sum(item => item.Def);
+                case ItemType.Armor:
+                    stat = Inventory.EquipedItems.Sum(item => item.Defense);
                     break;
             }
             return stat;
