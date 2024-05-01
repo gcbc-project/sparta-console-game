@@ -53,7 +53,7 @@ namespace SpartaConsoleGame
             }
             player.Inventory.Items.RemoveAt(inventoryItemindex);
             player.Gold += sellItemPrice;
-            Console.WriteLine($"{sellItemPrice}G에 판매를 완료했습니다.");
+            Console.WriteLine($"\n{sellItemPrice}G에 판매를 완료했습니다.");
             Thread.Sleep(500);
         }
     }
