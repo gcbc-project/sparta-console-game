@@ -18,7 +18,7 @@ namespace SpartaConsoleGame
             Label = label; Action = action;
         }
     }
-    
+
     internal class Menu
     {
         public string Title { get; private set; }
@@ -27,20 +27,20 @@ namespace SpartaConsoleGame
 
         public Action RefreshMenu { get; private set; }
 
-        private List<MenuItem> menuItems;
+        private List<MenuItem> _menuItems;
 
 
         public Menu()
         {
-            menuItems = new List<MenuItem>();
+            _menuItems = new List<MenuItem>();
         }
 
-        public void SetRefreshMenu(Action refreshMenu) 
+        public void SetRefreshMenu(Action refreshMenu)
         {
-            RefreshMenu = () => 
-            { 
-                menuItems.Clear(); 
-                refreshMenu(); 
+            RefreshMenu = () =>
+            {
+                _menuItems.Clear();
+                refreshMenu();
             };
         }
         public void SetTitle(string title)
@@ -61,7 +61,7 @@ namespace SpartaConsoleGame
         public void AddMenuItem(string option, Action action)
         {
 
-            menuItems.Add(new MenuItem(option, action));
+            _menuItems.Add(new MenuItem(option, action));
         }
 
         public void Display()
@@ -69,14 +69,14 @@ namespace SpartaConsoleGame
             Console.WriteLine(Title);
             Console.WriteLine(Description);
             if (Info != null)
-            { 
-                Console.WriteLine(Info());            
-            }
-            for (int i = 0; i < menuItems.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {menuItems[i].Label}");
+                Console.WriteLine(Info());
             }
-            
+            for (int i = 0; i < _menuItems.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {_menuItems[i].Label}");
+            }
+
             Console.WriteLine("\n0. 나가기");
         }
 
@@ -87,7 +87,7 @@ namespace SpartaConsoleGame
             Console.Write("\n원하시는 행동을 입력해주세요. >> ");
             string choice = Console.ReadLine();
 
-            if (int.TryParse(choice, out int c) && c <= menuItems.Count)
+            if (int.TryParse(choice, out int c) && c <= _menuItems.Count)
             {
                 return c;
             }
@@ -110,11 +110,11 @@ namespace SpartaConsoleGame
                     RefreshMenu();
                 }
                 Display();
-                
+
                 int choice = HandleChoice();
                 if (choice > 0)
                 {
-                    menuItems[choice - 1].Action.Invoke();
+                    _menuItems[choice - 1].Action.Invoke();
                 }
                 else if (choice == 0)
                 {

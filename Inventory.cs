@@ -20,18 +20,18 @@ namespace SpartaConsoleGame
         public string GetItemsInfo()
         {
             StringBuilder sb = new StringBuilder();
-            Items.ForEach(item => {sb.AppendLine(item.GetItemInfo());});
+            Items.ForEach(item => { sb.AppendLine(item.GetItemInfo()); });
             return sb.ToString();
         }
 
-        public void EquipedItem(int index)
+        public void EquipedItem(int itemIndex)
         {
-            InventoryItem? findItem = Items.Find(item => item.IsEquiped && Items[index].Type == item.Type);
-            if(findItem != null)
+            InventoryItem? findItem = Items.Find(item => item.IsEquiped && Items[itemIndex].Type == item.Type);
+            if (findItem != null)
             {
                 findItem.IsEquiped = false;
             }
-            Items[index].IsEquiped = !Items[index].IsEquiped;
+            Items[itemIndex].IsEquiped = !Items[itemIndex].IsEquiped;
         }
     }
 }
