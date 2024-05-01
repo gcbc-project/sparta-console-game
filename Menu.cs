@@ -25,13 +25,11 @@ namespace SpartaConsoleGame
         public string Description { get; private set; }
         public Action Info { get; private set; }
         public Action RefreshMenu { get; private set; }
-
         private List<MenuItem> _menuItems;
-
 
         public Menu()
         {
-            _menuItems = new List<MenuItem>(); 
+            _menuItems = new List<MenuItem>();
         }
 
         public void SetRefreshMenu(Action refreshMenu)
@@ -68,7 +66,7 @@ namespace SpartaConsoleGame
         {
             Console.WriteLine(Title);
             Console.WriteLine(Description);
-            Info?.Invoke(); 
+            Info?.Invoke();
             for (int i = 0; i < _menuItems.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {_menuItems[i].Label}");
@@ -271,12 +269,13 @@ namespace SpartaConsoleGame
 
         public static void DungeonResultMenu(int index)
         {
-            Console.Clear();
-            Menu dungeonClearMenu = new Menu();
-            dungeonClearMenu.SetTitle("[던전 클리어]\n");
+            // Console.Clear();
+            // Menu dungeonClearMenu = new Menu();
+            // dungeonClearMenu.SetTitle("[던전 클리어]\n");
 
-            dungeonClearMenu.SetInfo(() => DataManager._dungeonManager.Enter(DataManager._player, index));
-            dungeonClearMenu.Run();
+            // dungeonClearMenu.SetInfo(() => DataManager._dungeonManager.Enter(DataManager._player, index));
+            // dungeonClearMenu.Run();
+            DataManager._dungeonManager.Enter(DataManager._player, index);
         }
 
         public static void RestMenu()
