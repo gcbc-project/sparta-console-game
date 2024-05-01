@@ -23,8 +23,7 @@ namespace SpartaConsoleGame
     {
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public Func<string> Info { get; private set; }
-
+        public Action Info { get; private set; }
         public Action RefreshMenu { get; private set; }
 
         private List<MenuItem> _menuItems;
@@ -32,7 +31,7 @@ namespace SpartaConsoleGame
 
         public Menu()
         {
-            _menuItems = new List<MenuItem>();
+            _menuItems = new List<MenuItem>(); 
         }
 
         public void SetRefreshMenu(Action refreshMenu)
@@ -55,8 +54,9 @@ namespace SpartaConsoleGame
 
         public void SetInfo(Func<string> info)
         {
-            Info = info;
+            Info += () => { Console.WriteLine(info()); };
         }
+
 
         public void AddMenuItem(string option, Action action)
         {
@@ -68,10 +68,7 @@ namespace SpartaConsoleGame
         {
             Console.WriteLine(Title);
             Console.WriteLine(Description);
-            if (Info != null)
-            {
-                Console.WriteLine(Info());
-            }
+            Info?.Invoke(); 
             for (int i = 0; i < _menuItems.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {_menuItems[i].Label}");

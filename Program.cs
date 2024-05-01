@@ -62,7 +62,6 @@ internal class Program
         Menu invenMenu = new Menu();
 
         invenMenu.SetTitle("[인벤토리]");
-        invenMenu.SetInfo(_player.Inventory.GetItemsInfo);
         invenMenu.SetInfo(() =>
         {
 
@@ -116,8 +115,8 @@ internal class Program
 
         shopMenu.SetTitle("[상점]\n");
         shopMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.\n");
-        shopMenu.SetInfo(() => _player.GetGold() + _shop.GetItemsInfo());
-
+        shopMenu.SetInfo(_player.GetGold);
+        shopMenu.SetInfo(_shop.GetItemsInfo);
         shopMenu.AddMenuItem("아이템 구매", BuyMenu);
         shopMenu.AddMenuItem("아이템 판매", SellMenu);
 
