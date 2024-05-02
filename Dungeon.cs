@@ -50,13 +50,13 @@ namespace SpartaConsoleGame
 
             menu.AddMenuItem("공격", () => { BattlePhase(player); });
 
+            menu.SetExit(true);
             menu.Run();
         }
 
         public void BattlePhase(Player player)
         {
             Menu menu = new Menu();
-
             menu.SetTitle("[Battle!!]");
             menu.SetInfo(player.GetPlayerInfo);
             menu.SetRefreshMenu(() =>
@@ -71,9 +71,18 @@ namespace SpartaConsoleGame
                         {
                             AttackTurn(e, player);
                         });
+                    }, () => 
+                    {
+                        if (enemy.IsDead)
+                        {
+                            Console.WriteLine("\n이미 처치된 적 입니다.");
+                            Thread.Sleep(500);
+                        }
+                        return !enemy.IsDead;
                     });
                 }
             });
+            menu.SetExit(exitLabel: "취소");
 
             menu.Run();
         }
@@ -93,6 +102,8 @@ namespace SpartaConsoleGame
                 sb.AppendLine($"HP {prevHp} => {hp}");
                 return sb.ToString();
             });
+            menu.SetExit(exitLabel: "다음");
+
             menu.Run();
         }
 
