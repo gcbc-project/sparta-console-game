@@ -8,35 +8,48 @@ using System.Threading.Tasks;
 
 namespace SpartaConsoleGame
 {
-    internal class Player
+    internal class Player : ICharacter
     {
         public string Name { get; set; }
-        public string Job { get; set; }
         public int Level { get; set; }
-        public int Attack { get; set; }
-        public int CalculateAttack { get => Attack + CalculateItemStat(ItemType.Weapon); }
-        public int Defense { get; set; }
-        public int CalculateDefense { get => Defense + CalculateItemStat(ItemType.Armor); }
+        public int Atk { get; set; }
         public int Hp { get; set; }
+        public int MaxHp { get; set; }
+        public string Job { get; set; }
+
+        public int CalculateAtk { get => Atk + CalculateItemStat(ItemType.Weapon); }
+        public int Def { get; set; }
+        public int CalculateDef { get => Def + CalculateItemStat(ItemType.Armor); }
+
         public int Gold { get; set; }
         public float MaxExpStorage { get; set; }
         public float NowExpStorage { get; set; }
         public Inventory Inventory { get; set; }
+        private Random _random = new Random();
 
         public Player(string name, string job, float maxExpStorage, float nowExpStorage)
         {
             Name = name;
             Job = job;
             Level = 1;
-            Attack = 10;
-            Defense = 5;
+            Atk = 10;
+            Def = 5;
             Hp = 100;
+            MaxHp = 100;
             Gold = 10000;
             MaxExpStorage = maxExpStorage;
             NowExpStorage = nowExpStorage;
             Inventory = new Inventory();
         }
 
+        public string GetPlayerInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"[내정보]");
+            sb.AppendLine($"Lv.{Level} {Name} ({Job})");
+            sb.AppendLine($"HP {Hp}/{MaxHp}");
+            return sb.ToString();
+        }
         public string GetStatus()
         {
             int calculateItemAtk = CalculateItemStat(ItemType.Weapon);
@@ -45,12 +58,12 @@ namespace SpartaConsoleGame
             sb.AppendLine($"Lv. {Level}");
             sb.AppendLine($"{Name} ( {Job} )");
             sb.AppendLine($"EXP ({NowExpStorage} / {MaxExpStorage.ToString("N2")})");
-            sb.Append($"공격력 : {Attack}");
+            sb.Append($"공격력 : {Atk}");
             if (calculateItemAtk != 0)
             {
                 sb.Append($"(+{calculateItemAtk})");
             }
-            sb.Append($"\n방어력 : {Defense}");
+            sb.Append($"\n방어력 : {Def}");
             if (calculateItemDef != 0)
             {
                 sb.Append($"(+{calculateItemDef})");
@@ -68,17 +81,30 @@ namespace SpartaConsoleGame
 
             return sb.ToString();
         }
+        public int Attack()
+        {
+            return _random.Next((int)Math.Round(Atk * 0.9f), (int)Math.Round(Atk * 1.1f));
+        }
+        public string Hit(int damage)
+        {
+            Hp -= damage;
+            if (Hp <= 0)
+            {
+                return "Dead";
+            }
+            return Hp.ToString();
+        }
         public string Rest()
         {
             StringBuilder sb = new StringBuilder();
-            if (Gold >= 500 && Hp < 100)
+            if (Gold >= 500 && Hp < MaxHp)
             {
                 Gold -= 500;
                 //휴식 하기
-                Hp = 100;
-                sb.AppendLine($"\n휴식 완료");
+                Hp = MaxHp;
+                sb.AppendLine($"휴식 완료");
             }
-            else if (Gold >= 500 && Hp ==100 )
+            else if (Hp == 100)
             {
                 sb.AppendLine($"\n이미 최대체력입니다.");
             }
@@ -101,8 +127,8 @@ namespace SpartaConsoleGame
         {
             float remainExp = NowExpStorage - MaxExpStorage;
             Level++;
-            Defense += 1;
-            Attack += 2;
+            Def += 1;
+            Atk += 2;
             MaxExpStorage = (float)Math.Round((double)(MaxExpStorage * 1.05f));
             NowExpStorage = remainExp;
         }
@@ -113,10 +139,10 @@ namespace SpartaConsoleGame
             switch (itemType)
             {
                 case ItemType.Weapon:
-                    stat = Inventory.EquipedItems.Sum(item => item.Attack);
+                    stat = Inventory.EquipedItems.Sum(item => item.Atk);
                     break;
                 case ItemType.Armor:
-                    stat = Inventory.EquipedItems.Sum(item => item.Defense);
+                    stat = Inventory.EquipedItems.Sum(item => item.Def);
                     break;
             }
             return stat;

@@ -10,20 +10,20 @@ namespace SpartaConsoleGame
     {
         public string Name { get; set; }
         public string Desc { get; set; }
-        public int Attack { get; set; }
-        public int Defense { get; set; }
+        public int Atk { get; set; }
+        public int Def { get; set; }
         public int Price { get; set; }
         public bool IsEquiped { get; set; }
 
         public ItemType Type { get; set; }
 
-        public InventoryItem(string name, string desc, int price, ItemType type, int attack = 0, int defense = 0)
+        public InventoryItem(string name, string desc, int price, ItemType type, int atk = 0, int def = 0)
         {
             Name = name;
             Desc = desc;
             Price = price;
-            Attack = attack;
-            Defense = defense;
+            Atk = atk;
+            Def = def;
             Type = type;
         }
 
@@ -35,13 +35,13 @@ namespace SpartaConsoleGame
                 sb.Append("[E]");
             }
             sb.Append($"{Name}\t|");
-            if (Attack != 0)
+            if (Atk != 0)
             {
-                sb.Append($"공격력 {Attack}\t|");
+                sb.Append($"공격력 {Atk}\t|");
             }
-            if (Defense != 0)
+            if (Def != 0)
             {
-                sb.Append($"방어력 {Defense}\t|");
+                sb.Append($"방어력 {Def}\t|");
             }
             sb.Append($"{Desc}");
 
@@ -50,7 +50,7 @@ namespace SpartaConsoleGame
 
         public static explicit operator InventoryItem(ShopItem v)
         {
-            return new InventoryItem(v.Name, v.Desc, v.Price, v.Type, v.Attack, v.Defense);
+            return new InventoryItem(v.Name, v.Desc, v.Price, v.Type, v.Atk, v.Def);
         }
     }
 }
