@@ -32,7 +32,7 @@ namespace SpartaConsoleGame
         {
             Job = job;
             Level = 1;
-            Atk = 100;
+            Atk = 10;
             Def = 5;
             Hp = 100;
             MaxHp = 100;

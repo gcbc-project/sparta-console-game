@@ -31,8 +31,6 @@ namespace SpartaConsoleGame
         public bool IsExitHidden { get; private set; }
         public string ExitLabel { get; private set; } = "나가기";
         private List<MenuItem> _menuItems;
-        public string ExitLabel { get; private set; } = "나가기";
-        public bool IsExitHidden { get; private set; }
 
         public Menu()
         {
@@ -80,12 +78,6 @@ namespace SpartaConsoleGame
         public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
         {
             _menuItems.Add(new MenuItem(option, action, isAction));
-        }
-
-        public void SetExit(bool isExitHidden = false, string exitLabel = "나가기")
-        {
-            IsExitHidden = isExitHidden;
-            ExitLabel = exitLabel;
         }
 
         public void Display()
