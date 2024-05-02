@@ -65,12 +65,12 @@ namespace SpartaConsoleGame
             sb.Append($"공격력 : {CalculateAtk}");
             if (calculateItemAtk != 0)
             {
-                sb.Append($"(+{calculateItemAtk})");
+                sb.Append($" ({Atk} + {calculateItemAtk})");
             }
             sb.Append($"\n방어력 : {CalculateDef}");
             if (calculateItemDef != 0)
             {
-                sb.Append($"(+{calculateItemDef})");
+                sb.Append($" ({Def} + {calculateItemDef})");
             }
             sb.AppendLine($"\n체  력 : {Hp}");
             sb.AppendLine($"Gold : {Gold} G");
