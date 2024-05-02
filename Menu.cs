@@ -13,9 +13,12 @@ namespace SpartaConsoleGame
     {
         public string Label { get; private set; }
         public Action Action { get; private set; }
-        public MenuItem(string label, Action action)
+        public Func<bool> IsAction { get; private set; }
+        public MenuItem(string label, Action action, Func<bool> isAction)
         {
-            Label = label; Action = action;
+            Label = label;
+            Action = action;
+            IsAction = isAction;
         }
     }
 
@@ -25,12 +28,21 @@ namespace SpartaConsoleGame
         public string Description { get; private set; }
         public Action Info { get; private set; }
         public Action RefreshMenu { get; private set; }
+        public bool IsExitHidden { get; private set; }
+        public string ExitLabel { get; private set; } = "나가기";
         private List<MenuItem> _menuItems;
 
         public Menu()
         {
             _menuItems = new List<MenuItem>();
         }
+
+        public void SetExit(bool isExitHidden = false, string exitLabel = "나가기")
+        {
+            IsExitHidden = isExitHidden;
+            ExitLabel = exitLabel;
+        }
+
 
         public void SetRefreshMenu(Action refreshMenu)
         {
@@ -50,16 +62,23 @@ namespace SpartaConsoleGame
             Description = desc;
         }
 
-        public void SetInfo(Func<string> info)
+        public void SetInfo(Func<string> info, bool isRefresh = false)
         {
-            Info += () => { Console.WriteLine(info()); };
+            if (isRefresh)
+            {
+                Info = () => { Console.WriteLine(info()); };
+            }
+            else
+            {
+                Info += () => { Console.WriteLine(info()); };
+            }
         }
 
 
-        public void AddMenuItem(string option, Action action)
+        public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
         {
 
-            _menuItems.Add(new MenuItem(option, action));
+            _menuItems.Add(new MenuItem(option, action, isAction));
         }
 
         public void Display()
@@ -72,7 +91,10 @@ namespace SpartaConsoleGame
                 Console.WriteLine($"{i + 1}. {_menuItems[i].Label}");
             }
 
-            Console.WriteLine("\n0. 나가기");
+            if (!IsExitHidden)
+            {
+                Console.WriteLine($"\n0. {ExitLabel}");
+            }
         }
 
         public int HandleChoice()
@@ -109,9 +131,13 @@ namespace SpartaConsoleGame
                 int choice = HandleChoice();
                 if (choice > 0)
                 {
-                    _menuItems[choice - 1].Action.Invoke();
+                    if (_menuItems[choice - 1].IsAction == null ||
+                        _menuItems[choice - 1].IsAction.Invoke())
+                    {
+                        _menuItems[choice - 1].Action.Invoke();
+                    }
                 }
-                else if (choice == 0)
+                else if (!IsExitHidden && choice == 0)
                 {
                     break;
                 }
@@ -269,12 +295,6 @@ namespace SpartaConsoleGame
 
         public static void DungeonResultMenu(int index)
         {
-            // Console.Clear();
-            // Menu dungeonClearMenu = new Menu();
-            // dungeonClearMenu.SetTitle("[던전 클리어]\n");
-
-            // dungeonClearMenu.SetInfo(() => DataManager._dungeonManager.Enter(DataManager._player, index));
-            // dungeonClearMenu.Run();
             DataManager._dungeonManager.Enter(DataManager._player, index);
         }
 
