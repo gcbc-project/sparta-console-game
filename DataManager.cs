@@ -45,7 +45,7 @@ namespace SpartaConsoleGame
             _dungeonManager = new DungeonManager();
             _dungeonManager.DungeonList.Add(new Dungeon("쉬운", 5, 1000, 50, new List<IEnemy> { new Minion() }));
             _dungeonManager.DungeonList.Add(new Dungeon("일반", 11, 1700, 75, new List<IEnemy> { new Minion(), new Voidling() }));
-            _dungeonManager.DungeonList.Add(new Dungeon("어려운", 17, 2500, 100, new List<IEnemy> { new Minion(), new Voidling(), new CannonMinion() }));
+            _dungeonManager.DungeonList.Add(new Dungeon("어려운", 17, 2500, 100, new List<IEnemy> { new Minion(), new Voidling(), new CannonMinion() } ));
         }
     }
 }

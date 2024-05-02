@@ -12,9 +12,12 @@ namespace SpartaConsoleGame
     {
         public List<Dungeon> DungeonList { get; set; }
 
+       
+
         public DungeonManager()
         {
             DungeonList = new List<Dungeon>();
+          
         }
 
 
@@ -22,5 +25,6 @@ namespace SpartaConsoleGame
         {
             DungeonList[index].Battle(player);
         }
+ 
     }
 }

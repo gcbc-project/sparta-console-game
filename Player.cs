@@ -15,6 +15,7 @@ namespace SpartaConsoleGame
         public int Atk { get; set; }
         public int Hp { get; set; }
         public int MaxHp { get; set; }
+        public bool IsDead { get => Hp == 0; }
         public string Job { get; set; }
 
         public int CalculateAtk { get => Atk + CalculateItemStat(ItemType.Weapon); }
@@ -31,7 +32,7 @@ namespace SpartaConsoleGame
         {
             Job = job;
             Level = 1;
-            Atk = 10;
+            Atk = 100;
             Def = 5;
             Hp = 100;
             MaxHp = 100;
@@ -87,16 +88,22 @@ namespace SpartaConsoleGame
         }
         public int Attack()
         {
-            return _random.Next((int)Math.Round(Atk * 0.9f), (int)Math.Round(Atk * 1.1f));
+            return _random.Next((int)Math.Round(CalculateAtk * 0.9f), (int)Math.Round(CalculateAtk * 1.1f));
         }
         public string Hit(int damage)
         {
             Hp -= damage;
             if (Hp <= 0)
             {
+                Die();
                 return "Dead";
             }
             return Hp.ToString();
+        }
+
+        public void Die()
+        {
+            Hp = 0;
         }
         public string Rest()
         {
