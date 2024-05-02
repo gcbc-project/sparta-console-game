@@ -1,4 +1,6 @@
 ﻿
+using System.Numerics;
+
 namespace SpartaConsoleGame
 {
     internal class DataManager
@@ -16,18 +18,18 @@ namespace SpartaConsoleGame
             }
         }
 
-        public static Player _player;
-        public static Shop _shop;
-        public static DungeonManager _dungeonManager;
+        public Player _player;
+        public Shop _shop;
+        public DungeonManager _dungeonManager;
 
         public DataManager()
         {
-            _player = new Player("르탄", "전사", 100, 0);
+            _player = new Player("전사", 100, 0);
             _shop = new Shop();
             _dungeonManager = new DungeonManager();
         }
 
-        public static void InitShopItem()
+        public void InitShopItem()
         {
             _shop = new Shop();
             _shop.Items.Add(new ShopItem("수련자의 갑옷", "수련에 도움을 주는 갑옷입니다.", 1000, ItemType.Armor, def: 5));
@@ -38,7 +40,7 @@ namespace SpartaConsoleGame
             _shop.Items.Add(new ShopItem("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 3000, ItemType.Weapon, atk: 7));
             _shop.Items.Add(new ShopItem("광선검", "제다이 전사들이 사용하던 검입니다.", 5000, ItemType.Weapon, atk: 15));
         }
-        public static void InitDungeon()
+        public void InitDungeon()
         {
             _dungeonManager = new DungeonManager();
             _dungeonManager.DungeonList.Add(new Dungeon("쉬운", 5, 1000, 50, new List<IEnemy> { new Minion() }));

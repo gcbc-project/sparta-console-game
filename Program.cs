@@ -7,9 +7,8 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        DataManager dataManager = new DataManager();
-        DataManager.InitShopItem();
-        DataManager.InitDungeon();
-        Menu.MainMenu();
+        DataManager.Instance.InitShopItem();
+        DataManager.Instance.InitDungeon();
+        Menu.StartMenu();
     }
 }
