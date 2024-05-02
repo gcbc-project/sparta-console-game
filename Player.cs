@@ -28,9 +28,8 @@ namespace SpartaConsoleGame
         public Inventory Inventory { get; set; }
         private Random _random = new Random();
 
-        public Player(string name, string job, float maxExpStorage, float nowExpStorage)
+        public Player(string job, float maxExpStorage, float nowExpStorage)
         {
-            Name = name;
             Job = job;
             Level = 1;
             Atk = 100;
@@ -41,6 +40,11 @@ namespace SpartaConsoleGame
             MaxExpStorage = maxExpStorage;
             NowExpStorage = nowExpStorage;
             Inventory = new Inventory();
+        }
+
+        public void SetName()
+        {
+            Name = Console.ReadLine();
         }
 
         public string GetPlayerInfo()
@@ -59,15 +63,15 @@ namespace SpartaConsoleGame
             sb.AppendLine($"Lv. {Level}");
             sb.AppendLine($"{Name} ( {Job} )");
             sb.AppendLine($"EXP ({NowExpStorage} / {MaxExpStorage.ToString("N2")})");
-            sb.Append($"공격력 : {Atk}");
+            sb.Append($"공격력 : {CalculateAtk}");
             if (calculateItemAtk != 0)
             {
-                sb.Append($"(+{calculateItemAtk})");
+                sb.Append($" ({Atk} + {calculateItemAtk})");
             }
-            sb.Append($"\n방어력 : {Def}");
+            sb.Append($"\n방어력 : {CalculateDef}");
             if (calculateItemDef != 0)
             {
-                sb.Append($"(+{calculateItemDef})");
+                sb.Append($" ({Def} + {calculateItemDef})");
             }
             sb.AppendLine($"\n체  력 : {Hp}");
             sb.AppendLine($"Gold : {Gold} G");

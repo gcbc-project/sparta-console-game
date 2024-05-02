@@ -81,13 +81,13 @@ namespace SpartaConsoleGame
                 }
             });
 
+            menu.SetExit(true);
             menu.Run();
         }
 
         public void BattlePhase(Player player)
         {
             Menu menu = new Menu();
-
             menu.SetTitle("[Battle!! - Phase]");
             menu.SetInfo(player.GetPlayerInfo);
             menu.SetRefreshMenu(() =>
@@ -151,6 +151,7 @@ namespace SpartaConsoleGame
                 return sb.ToString();
             });
             menu.SetExit(exitLabel: "다음");
+
             menu.Run();
         }
 
