@@ -13,9 +13,12 @@ namespace SpartaConsoleGame
     {
         public string Label { get; private set; }
         public Action Action { get; private set; }
-        public MenuItem(string label, Action action)
+        public Func<bool> IsAction { get; private set; }
+        public MenuItem(string label, Action action, Func<bool> isAction)
         {
-            Label = label; Action = action;
+            Label = label; 
+            Action = action; 
+            IsAction = isAction;
         }
     }
 
@@ -26,6 +29,8 @@ namespace SpartaConsoleGame
         public Action Info { get; private set; }
         public Action RefreshMenu { get; private set; }
         private List<MenuItem> _menuItems;
+        public string ExitLabel { get; private set; } = "나가기";
+        public bool IsExitHidden { get; private set; }
 
         public Menu()
         {
@@ -56,10 +61,15 @@ namespace SpartaConsoleGame
         }
 
 
-        public void AddMenuItem(string option, Action action)
+        public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
         {
+            _menuItems.Add(new MenuItem(option, action, isAction));
+        }
 
-            _menuItems.Add(new MenuItem(option, action));
+        public void SetExit(bool isExitHidden = false, string exitLabel = "나가기")
+        {
+            IsExitHidden = isExitHidden;
+            ExitLabel = exitLabel;
         }
 
         public void Display()
@@ -71,8 +81,10 @@ namespace SpartaConsoleGame
             {
                 Console.WriteLine($"{i + 1}. {_menuItems[i].Label}");
             }
-
-            Console.WriteLine("\n0. 나가기");
+            if (IsExitHidden == false)
+            {
+                Console.WriteLine($"\n0. {ExitLabel}");
+            }
         }
 
         public int HandleChoice()
@@ -109,9 +121,12 @@ namespace SpartaConsoleGame
                 int choice = HandleChoice();
                 if (choice > 0)
                 {
-                    _menuItems[choice - 1].Action.Invoke();
+                    if (_menuItems[choice -1].IsAction == null || _menuItems[choice -1].IsAction())
+                    {
+                        _menuItems[choice - 1].Action.Invoke();
+                    }
                 }
-                else if (choice == 0)
+                else if (choice == 0 && IsExitHidden == false)
                 {
                     break;
                 }
