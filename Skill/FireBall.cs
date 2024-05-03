@@ -10,7 +10,7 @@ namespace SpartaConsoleGame.Skill
     {
         public override string Name => "파이어 볼";
         public override string Desc => "적을 150%로 1회 불태우는 화염구를 날린다";
-        public override int MPCost => 5;
+        public override int MPCost => 15;
 
         public override int Use(ICharacter character)
         {
