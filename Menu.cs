@@ -22,6 +22,7 @@ namespace SpartaConsoleGame
             Label = label;
             Action = action;
             IsAction = isAction;
+
         }
     }
 
@@ -35,6 +36,8 @@ namespace SpartaConsoleGame
         public string ExitLabel { get; private set; } = "나가기";
         public Func<bool> IsSkip { get; set; }
         private List<MenuItem> _menuItems;
+
+
 
         public Menu()
         {
@@ -223,7 +226,7 @@ namespace SpartaConsoleGame
             mainMenu.AddMenuItem("상태보기", StatusMenu);
             mainMenu.AddMenuItem("인벤토리", InvenMenu);
             mainMenu.AddMenuItem("상점", ShopMenu);
-            mainMenu.AddMenuItem("던전 입장", DungeonMenu);
+            mainMenu.AddMenuItem("던전 입장", DungeonMenu, () => !DataManager.Instance.Player.IsDead);
             mainMenu.AddMenuItem("휴식하기", RestMenu);
             mainMenu.AddMenuItem("저장하기", SaveMenu);
             mainMenu.AddMenuItem("게임종료", ExitGame);
@@ -384,6 +387,7 @@ namespace SpartaConsoleGame
             Menu dungeonMenu = new Menu();
             dungeonMenu.SetTitle("[던전 입장]\n");
             dungeonMenu.SetDesc("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+
             for (int i = 0; i < DataManager.Instance.DungeonManager.DungeonList.Count; i++)
             {
                 int index = i;
@@ -395,7 +399,9 @@ namespace SpartaConsoleGame
 
         public static void DungeonResultMenu(int index)
         {
+
             DataManager.Instance.DungeonManager.Enter(DataManager.Instance.Player, index);
+
         }
 
         public static void RestMenu()

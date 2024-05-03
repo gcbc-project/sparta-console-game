@@ -1,9 +1,12 @@
+﻿using SpartaConsoleGame.Enemy;
 ﻿using SpartaConsoleGame.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SpartaConsoleGame
 {
@@ -15,14 +18,20 @@ namespace SpartaConsoleGame
         public float ExpReward { get; set; }
         public List<IEnemy> EnemyList { get; set; }
         private List<IEnemy> SelectEnemyList { get; set; }
+        public List<DropItem> DropItems { get; set; }
+
+        public Item RelicItem { get; private set; }
+
         private Random _random = new Random();
-        public Dungeon(string title, int recommendDefense, int basicReward, float expReward, List<IEnemy> enemyList)
+        public Dungeon(string title, int recommendDefense, int basicReward, float expReward, List<IEnemy> enemyList, List<DropItem> dropItems)
         {
             Title = title;
             RecommendDefense = recommendDefense;
             BasicReward = basicReward;
             ExpReward = expReward;
             EnemyList = enemyList;
+            DropItems = dropItems;
+
         }
 
         public string GetDungeonInfo()
@@ -47,6 +56,9 @@ namespace SpartaConsoleGame
             {
                 menu.SetInfo(() => $"Victory\n", true);
                 menu.SetInfo(() => $"던전에서 몬스터 {SelectEnemyList.Count}마리를 잡았습니다.\n");
+                menu.SetInfo(() => $"보상 목록\n");
+                SetRewardItems( menu, player);
+
             }
             else
             {
@@ -177,5 +189,24 @@ namespace SpartaConsoleGame
                 SelectEnemyList.Add(EnemyList[index].DeepCopy());
             }
         }
+
+
+
+        public void SetRewardItems(Menu menu, Player player)
+        {
+            List<DropItem> dropItems = DropItems;
+
+            foreach (var item in dropItems)
+            {
+                int itemRandom = _random.Next(0, 100);
+                if (itemRandom <= item.DropRate * 100)
+                {
+                    player.Inventory.AddItem(item.BaseItem);
+                    menu.SetInfo(() => $"{item.GetItemInfo()}\n");
+                }
+            }
+        }
+
+        
     }
 }

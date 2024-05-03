@@ -7,8 +7,7 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        DataManager.Instance.InitShopItem();
-        DataManager.Instance.InitDungeon();
+        DataManager.Instance.InitGame();
         Menu.ChooseGame();
     }
 }
