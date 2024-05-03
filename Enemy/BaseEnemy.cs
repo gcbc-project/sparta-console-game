@@ -1,3 +1,4 @@
+using SpartaConsoleGame.Enemy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,15 @@ namespace SpartaConsoleGame
         public string Name { get; set; }
         public int Level { get; set; }
         public int Hp { get; set; }
-        public int Atk { get; set; }
+        public Stats Stats { get; set; }
         public bool IsDead { get; set; }
         public int MaxHp { get; set; }
 
         protected Random random;
-        public BaseEnemy()
+        public BaseEnemy(Stats stats)
         {
             random = new Random();
+            Stats = stats;
         }
         public virtual string GetEnemyInfo()
         {
@@ -47,7 +49,7 @@ namespace SpartaConsoleGame
         }
         public virtual int Attack()
         {
-            return random.Next((int)Math.Round(Atk * 0.9f), (int)Math.Round(Atk * 1.1f));
+            return random.Next((int)Math.Round(Stats.Atk * 0.9f), (int)Math.Round(Stats.Atk * 1.1f));
         }
 
         public virtual void Die()
@@ -64,7 +66,7 @@ namespace SpartaConsoleGame
             newEnemy.Name = this.Name;
             newEnemy.Level = this.Level;
             newEnemy.Hp = this.Hp;
-            newEnemy.Atk = this.Atk;
+            newEnemy.Stats = this.Stats.DeepCopy();
             newEnemy.IsDead = this.IsDead;
 
             // Deep Copy를 위해 Random 객체는 공유되지 않도록 새로 생성
