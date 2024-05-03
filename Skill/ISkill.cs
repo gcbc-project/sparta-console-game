@@ -11,5 +11,6 @@ namespace SpartaConsoleGame.Skill
         string Desc { get; }
         int MPCost { get; }
         void Use(ICharacter character);
+        string GetSkillInfo();
     }
 }
