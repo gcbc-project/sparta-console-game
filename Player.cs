@@ -1,12 +1,6 @@
 ﻿using SpartaConsoleGame.Enemy;
 using SpartaConsoleGame.Skill;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SpartaConsoleGame
 {
@@ -42,13 +36,6 @@ namespace SpartaConsoleGame
             NowExpStorage = 0;
             Inventory = new Inventory();
         }
-
-        //public string SetName()
-        //{
-        //    Name = Console.ReadLine();
-        //    return Name;
-        //}
-
         public string GetPlayerInfo()
         {
             StringBuilder sb = new StringBuilder();

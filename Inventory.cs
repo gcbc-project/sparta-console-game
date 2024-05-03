@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace SpartaConsoleGame
 {
@@ -48,14 +43,14 @@ namespace SpartaConsoleGame
             {
                 Items.Add(new InventoryItem(item.DeepCopy()));
             }
-            
+
         }
 
         public void RemoveItem(Item item)
         {
             InventoryItem? findItem = Items.Find(inventoryItem => inventoryItem.BaseItem.Id == item.Id);
             // if 해당 아이템이 여러개인 경우 카운트 감소
-            if(findItem?.BaseItem.Count > 1)
+            if (findItem?.BaseItem.Count > 1)
             {
                 findItem.BaseItem.Count--;
             }
