@@ -1,6 +1,9 @@
 ﻿
 using SpartaConsoleGame.Enemy;
 using System.Numerics;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using SpartaConsoleGame.JsonConverts;
 
 namespace SpartaConsoleGame
 {
@@ -19,8 +22,11 @@ namespace SpartaConsoleGame
             }
         }
 
+        [JsonProperty]
         public Player Player { get; private set; }
+        [JsonProperty]
         public Shop Shop { get; private set; }
+        [JsonProperty]
         public DungeonManager DungeonManager { get; private set; }
 
 
@@ -34,11 +40,24 @@ namespace SpartaConsoleGame
             DungeonManager = new DungeonManager();
 
         }
-        public void CreatePlayer(string name, IJob job)
+        public void CreatePlayer(Player player)
         {
-            Player = new Player(name, job);
+            Player = player;
         }
-
+        public void LoadGameData()
+        {
+            Player = SaveManager.LoadData<Player>("Player", new JsonSerializerSettings
+            {
+                Converters = { new IJobConverter() },
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+            Shop = SaveManager.LoadData<Shop>("Shop");
+            DungeonManager = SaveManager.LoadData<DungeonManager>("DungeonManager", new JsonSerializerSettings
+            {
+                Converters = { new IEnemyConverter() },
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+        }
 
 
         public void InitGame()

@@ -1,10 +1,15 @@
 using SpartaConsoleGame.Enemy;
+using SpartaConsoleGame.Skill;
 
 namespace SpartaConsoleGame
 {
-    public class Warrior : IJob
+    internal class Warrior : Player
     {
-        public string Name => "Àü»ç";
-        public Stats Stats => new Stats(120, 50, 15, 10, 1.15f, 1.05f);
+        public Warrior(string name)
+        : base(name, new Stats(120, 50, 15, 10, 1.15f, 1.05f))
+        {
+            Skills = new List<ISkill> { new PowerStrike() };
+            JobLabel = "ì „ì‚¬";
+        }
     }
 }

@@ -8,6 +8,6 @@ internal class Program
     private static void Main(string[] args)
     {
         DataManager.Instance.InitGame();
-        Menu.StartMenu();
+        Menu.ChooseGame();
     }
 }

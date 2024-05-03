@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using SpartaConsoleGame;
+using SpartaConsoleGame.JsonConverts;
 
 namespace SpartaConsoleGame
 {
@@ -32,6 +34,7 @@ namespace SpartaConsoleGame
         public Action RefreshMenu { get; private set; }
         public bool IsExitHidden { get; private set; }
         public string ExitLabel { get; private set; } = "나가기";
+        public Func<bool> IsSkip { get; set; }
         private List<MenuItem> _menuItems;
 
 
@@ -45,6 +48,10 @@ namespace SpartaConsoleGame
         {
             IsExitHidden = isExitHidden;
             ExitLabel = exitLabel;
+        }
+        public void SetIsSkip(Func<bool> isSkip)
+        {
+            IsSkip = isSkip;
         }
 
 
@@ -77,7 +84,6 @@ namespace SpartaConsoleGame
                 Info += () => { Console.WriteLine(info()); };
             }
         }
-
 
         public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
         {
@@ -124,6 +130,10 @@ namespace SpartaConsoleGame
         {
             while (true)
             {
+                if (IsSkip != null && IsSkip.Invoke())
+                {
+                    break;
+                }
                 Console.Clear();
                 if (RefreshMenu != null)
                 {
@@ -153,9 +163,30 @@ namespace SpartaConsoleGame
             Console.WriteLine(Title);
             Console.Write(Description);
         }
+        public static void ChooseGame()
+        {
+            Menu chooseGameMenu = new Menu();
+            chooseGameMenu.AddMenuItem("새 게임", StartMenu);
+            chooseGameMenu.AddMenuItem("불러오기", () =>
+            {
+                DataManager.Instance.LoadGameData();
+                if (DataManager.Instance.Player == null)
+                {
+                    Console.WriteLine("저장된 데이터가 없습니다.");
+                    Thread.Sleep(500);
+                }
+                else
+                {
+                    MainMenu();
+                }
+            });
+            chooseGameMenu.SetExit(true);
+            chooseGameMenu.Run();
+        }
 
         public static void StartMenu()
         {
+            Console.Clear();
             Menu mainMenu = new Menu();
 
             mainMenu.SetTitle("\n스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.");
@@ -174,12 +205,12 @@ namespace SpartaConsoleGame
 
             jobMenu.AddMenuItem("전사", () =>
             {
-                DataManager.Instance.CreatePlayer(playerName, new Warrior());
+                DataManager.Instance.CreatePlayer(new Warrior(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.AddMenuItem("마법사", () =>
             {
-                DataManager.Instance.CreatePlayer(playerName, new Mage());
+                DataManager.Instance.CreatePlayer(new Mage(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.SetExit(true);
@@ -197,11 +228,29 @@ namespace SpartaConsoleGame
             mainMenu.AddMenuItem("상점", ShopMenu);
             mainMenu.AddMenuItem("던전 입장", DungeonMenu, () => !DataManager.Instance.Player.IsDead);
             mainMenu.AddMenuItem("휴식하기", RestMenu);
+            mainMenu.AddMenuItem("저장하기", SaveMenu);
             mainMenu.AddMenuItem("게임종료", ExitGame);
             mainMenu.SetExit(true);
 
             mainMenu.Run();
 
+        }
+
+        public static void SaveMenu()
+        {
+            Console.Clear();
+            Menu saveMenu = new Menu();
+            saveMenu.SetTitle("[게임 저장]");
+            saveMenu.SetDesc("게임을 저장 하시겠습니까?\n");
+            saveMenu.AddMenuItem("네", () =>
+            {
+                SaveManager.SaveData("Player", DataManager.Instance.Player);
+                SaveManager.SaveData("Shop", DataManager.Instance.Shop);
+                SaveManager.SaveData("DungeonManager", DataManager.Instance.DungeonManager);
+            });
+            saveMenu.SetExit(false, "나가기");
+
+            saveMenu.Run();
         }
         public static void ExitGame()
         {
