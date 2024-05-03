@@ -1,3 +1,4 @@
+using SpartaConsoleGame.Enemy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,11 @@ namespace SpartaConsoleGame
 {
     public class Minion : BaseEnemy
     {
-        public Minion()
+        public Minion() : base(new Stats(hp :15, atk : 5))
         {
             Name = "미니언";
             Level = 2;
-            MaxHp = 15;
-            Hp = 15;
-            Atk = 5;
+            Hp = Stats.Hp;
         }
     }
 }

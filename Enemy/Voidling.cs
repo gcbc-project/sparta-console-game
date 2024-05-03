@@ -1,3 +1,4 @@
+using SpartaConsoleGame.Enemy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,11 @@ namespace SpartaConsoleGame
 {
     public class Voidling : BaseEnemy
     {
-        public Voidling()
+        public Voidling() : base(new Stats(hp: 10, atk: 9))
         {
             Name = "공허충";
             Level = 3;
-            MaxHp = 10;
-            Hp = 10;
-            Atk = 9;
+            Hp = Stats.Hp;
         }
     }
 }
