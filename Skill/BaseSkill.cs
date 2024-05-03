@@ -16,8 +16,8 @@ namespace SpartaConsoleGame.Skill
         public virtual string GetSkillInfo()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"{Name} - MP {MPCost})");
-            sb.AppendLine($"{Desc})");
+            sb.AppendLine($"{Name} - MP {MPCost}");
+            sb.AppendLine($"{Desc}");
 
             return sb.ToString();
         }
