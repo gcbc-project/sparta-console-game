@@ -1,4 +1,5 @@
 ﻿using SpartaConsoleGame.Enemy;
+using SpartaConsoleGame.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace SpartaConsoleGame
         public int Mp { get; set; }
         public Stats Stats { get; set; }
         public bool IsDead { get => Hp == 0; }
+        public List<ISkill> Skills { get; set; }
 
         public int CalculateAtk { get => Stats.Atk + CalculateItemStat(ItemType.Weapon); }
         public int CalculateDef { get => Stats.Def + CalculateItemStat(ItemType.Armor); }
