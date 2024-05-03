@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpartaConsoleGame
 {
-    internal class Player : ICharacter
+    internal class Player : ICharacter, IJob
     {
         public string Name { get; set; }
         public int Level { get; set; }
@@ -17,7 +17,6 @@ namespace SpartaConsoleGame
         public int Mp { get; set; }
         public Stats Stats { get; set; }
         public bool IsDead { get => Hp == 0; }
-        public string Job { get; set; }
 
         public int CalculateAtk { get => Stats.Atk + CalculateItemStat(ItemType.Weapon); }
         public int CalculateDef { get => Stats.Def + CalculateItemStat(ItemType.Armor); }
@@ -26,14 +25,16 @@ namespace SpartaConsoleGame
         public float MaxExpStorage { get; set; }
         public float NowExpStorage { get; set; }
         public Inventory Inventory { get; set; }
+        public string JobLabel { get; set; }
+
         private Random _random = new Random();
 
-        public Player(string name, IJob job)
+        public Player(string name, Stats stats, string jobLabel)
         {
             Name = name;
-            Job = job.Name;
             Level = 1;
-            Stats = job.Stats;
+            JobLabel = jobLabel;
+            Stats = stats;
             Hp = Stats.Hp;
             Mp = Stats.Mp;
             Gold = 10000;
@@ -52,7 +53,7 @@ namespace SpartaConsoleGame
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"[내정보]");
-            sb.AppendLine($"Lv.{Level} {Name} ({Job})");
+            sb.AppendLine($"Lv.{Level} {Name} ({JobLabel})");
             sb.AppendLine($"HP {Hp}/{Stats.Hp}");
             return sb.ToString();
         }
@@ -62,7 +63,7 @@ namespace SpartaConsoleGame
             int calculateItemDef = CalculateItemStat(ItemType.Armor);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Lv. {Level}");
-            sb.AppendLine($"{Name} ( {Job} )");
+            sb.AppendLine($"{Name} ( {JobLabel} )");
             sb.AppendLine($"EXP ({NowExpStorage} / {MaxExpStorage.ToString("N2")})");
             sb.AppendLine($"체  력 : {Hp} / {Stats.Hp}");
             sb.AppendLine($"마  나 : {Mp} / {Stats.Mp}");

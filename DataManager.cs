@@ -28,9 +28,9 @@ namespace SpartaConsoleGame
             Shop = new Shop();
             DungeonManager = new DungeonManager();
         }
-        public void CreatePlayer(string name, IJob job)
+        public void CreatePlayer(Player player)
         {
-            Player = new Player(name, job);
+            Player = player;
         }
 
 

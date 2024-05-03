@@ -169,12 +169,14 @@ namespace SpartaConsoleGame
             jobMenu.SetTitle("\n[직업 선택]");
             jobMenu.SetDesc("\n직업을 선택해주세요 \n");
 
-            jobMenu.AddMenuItem("전사", () => {
-                DataManager.Instance.CreatePlayer(playerName, new Warrior());
+            jobMenu.AddMenuItem("전사", () =>
+            {
+                DataManager.Instance.CreatePlayer(new Warrior(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
-            jobMenu.AddMenuItem("마법사", () => {
-                DataManager.Instance.CreatePlayer(playerName, new Mage());
+            jobMenu.AddMenuItem("마법사", () =>
+            {
+                DataManager.Instance.CreatePlayer(new Mage(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.SetExit(true);
@@ -204,7 +206,7 @@ namespace SpartaConsoleGame
             Menu exitMenu = new Menu();
             exitMenu.SetDesc("정말 게임을 종료하시겠습니까?\n");
             exitMenu.AddMenuItem("네", () => Environment.Exit(0));
-            exitMenu.SetExit(false,"아니요");
+            exitMenu.SetExit(false, "아니요");
 
             exitMenu.Run();
         }

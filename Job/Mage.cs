@@ -2,9 +2,9 @@ using SpartaConsoleGame.Enemy;
 
 namespace SpartaConsoleGame
 {
-    public class Mage : IJob
+    internal class Mage : Player
     {
-        public string Name => "¸¶¹ý»ç";
-        public Stats Stats => new Stats(80, 150, 10, 5, 1.10f, 1.15f);
+        public Mage(string name)
+        : base(name, new Stats(80, 150, 10, 5, 1.10f, 1.15f), "ë§ˆë²•ì‚¬") { }
     }
 }
