@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.VisualBasic;
 using SpartaConsoleGame;
 
@@ -157,9 +158,27 @@ namespace SpartaConsoleGame
             mainMenu.SetTitle("\n스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.");
             mainMenu.SetDesc("\n이름을 입력해주세요 : ");
             mainMenu.StartMenuDesc();
-            DataManager.Instance._player.SetName();
+            string playerName = Console.ReadLine();
 
-            MainMenu();
+            JobChoiceMenu(playerName);
+        }
+
+        public static void JobChoiceMenu(string playerName)
+        {
+            Menu jobMenu = new Menu();
+            jobMenu.SetTitle("\n[직업 선택]");
+            jobMenu.SetDesc("\n직업을 선택해주세요 \n");
+
+            jobMenu.AddMenuItem("전사", () => {
+                DataManager.Instance.CreatePlayer(playerName, new Warrior());
+                MainMenu();  // 직업 선택 후 메인 메뉴 호출
+            });
+            jobMenu.AddMenuItem("마법사", () => {
+                DataManager.Instance.CreatePlayer(playerName, new Mage());
+                MainMenu();  // 직업 선택 후 메인 메뉴 호출
+            });
+            jobMenu.SetExit(true);
+            jobMenu.Run();
         }
 
         public static void MainMenu()
@@ -173,9 +192,21 @@ namespace SpartaConsoleGame
             mainMenu.AddMenuItem("상점", ShopMenu);
             mainMenu.AddMenuItem("던전 입장", DungeonMenu);
             mainMenu.AddMenuItem("휴식하기", RestMenu);
+            mainMenu.AddMenuItem("게임종료", ExitGame);
+            mainMenu.SetExit(true);
 
             mainMenu.Run();
 
+        }
+        public static void ExitGame()
+        {
+            Console.Clear();
+            Menu exitMenu = new Menu();
+            exitMenu.SetDesc("정말 게임을 종료하시겠습니까?\n");
+            exitMenu.AddMenuItem("네", () => Environment.Exit(0));
+            exitMenu.SetExit(false,"아니요");
+
+            exitMenu.Run();
         }
 
         public static void StatusMenu()
@@ -185,7 +216,7 @@ namespace SpartaConsoleGame
 
 
             statusMenu.SetTitle("[스테이터스]");
-            statusMenu.SetInfo(DataManager.Instance._player.GetStatus);
+            statusMenu.SetInfo(DataManager.Instance.Player.GetStatus);
 
             statusMenu.Run();
         }
@@ -200,13 +231,13 @@ namespace SpartaConsoleGame
             invenMenu.SetInfo(() =>
             {
 
-                if (DataManager.Instance._player.Inventory.Items.Count == 0)
+                if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
                     return "인벤토리가 비었습니다\n";
                 }
                 else
                 {
-                    return DataManager.Instance._player.Inventory.GetItemsInfo();
+                    return DataManager.Instance.Player.Inventory.GetItemsInfo();
                 }
             });
             invenMenu.AddMenuItem("장착관리", EquipMenu);
@@ -223,16 +254,16 @@ namespace SpartaConsoleGame
             equipMenu.SetTitle("[인벤토리]");
             equipMenu.SetRefreshMenu(() =>
             {
-                for (int i = 0; i < DataManager.Instance._player.Inventory.Items.Count; i++)
+                for (int i = 0; i < DataManager.Instance.Player.Inventory.Items.Count; i++)
                 {
                     int index = i;
-                    equipMenu.AddMenuItem(DataManager.Instance._player.Inventory.Items[index].GetItemInfo(), () => { DataManager.Instance._player.Inventory.EquipedItem(index); });
+                    equipMenu.AddMenuItem(DataManager.Instance.Player.Inventory.Items[index].GetItemInfo(), () => { DataManager.Instance.Player.Inventory.EquipedItem(index); });
 
                 }
             });
             equipMenu.SetInfo(() =>
             {
-                if (DataManager.Instance._player.Inventory.Items.Count == 0)
+                if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
                     return "인벤토리이 비었습니다";
                 }
@@ -250,8 +281,8 @@ namespace SpartaConsoleGame
 
             shopMenu.SetTitle("[상점]\n");
             shopMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.\n");
-            shopMenu.SetInfo(DataManager.Instance._player.GetGold);
-            shopMenu.SetInfo(DataManager.Instance._shop.GetItemsInfo);
+            shopMenu.SetInfo(DataManager.Instance.Player.GetGold);
+            shopMenu.SetInfo(DataManager.Instance.Shop.GetItemsInfo);
             shopMenu.AddMenuItem("아이템 구매", BuyMenu);
             shopMenu.AddMenuItem("아이템 판매", SellMenu);
 
@@ -264,13 +295,13 @@ namespace SpartaConsoleGame
             Menu buyMenu = new Menu();
             buyMenu.SetTitle("[상점 - 아이템 구매]\n");
             buyMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.");
-            buyMenu.SetInfo(DataManager.Instance._player.GetGold);
+            buyMenu.SetInfo(DataManager.Instance.Player.GetGold);
             buyMenu.SetRefreshMenu(() =>
             {
-                for (int i = 0; i < DataManager.Instance._shop.Items.Count; i++)
+                for (int i = 0; i < DataManager.Instance.Shop.Items.Count; i++)
                 {
                     int index = i;
-                    buyMenu.AddMenuItem(DataManager.Instance._shop.Items[index].GetItemInfo(), () => { DataManager.Instance._shop.Buy(DataManager.Instance._player, index); });
+                    buyMenu.AddMenuItem(DataManager.Instance.Shop.Items[index].GetItemInfo(), () => { DataManager.Instance.Shop.Buy(DataManager.Instance.Player, index); });
 
                 }
             });
@@ -284,13 +315,13 @@ namespace SpartaConsoleGame
             Menu sellMenu = new Menu();
             sellMenu.SetTitle("[상점 - 아이템 판매]\n");
             sellMenu.SetDesc($"보유한 아이템을 팔 수 있는 상점입니다.\n");
-            sellMenu.SetInfo(DataManager.Instance._player.GetGold);
+            sellMenu.SetInfo(DataManager.Instance.Player.GetGold);
             sellMenu.SetRefreshMenu(() =>
             {
-                for (int i = 0; i < DataManager.Instance._player.Inventory.Items.Count; i++)
+                for (int i = 0; i < DataManager.Instance.Player.Inventory.Items.Count; i++)
                 {
                     int index = i;
-                    sellMenu.AddMenuItem(DataManager.Instance._player.Inventory.Items[index].GetItemInfo(), () => { DataManager.Instance._shop.Sell(DataManager.Instance._player, index); });
+                    sellMenu.AddMenuItem(DataManager.Instance.Player.Inventory.Items[index].GetItemInfo(), () => { DataManager.Instance.Shop.Sell(DataManager.Instance.Player, index); });
                 }
             });
             sellMenu.Run();
@@ -302,10 +333,10 @@ namespace SpartaConsoleGame
             Menu dungeonMenu = new Menu();
             dungeonMenu.SetTitle("[던전 입장]\n");
             dungeonMenu.SetDesc("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
-            for (int i = 0; i < DataManager.Instance._dungeonManager.DungeonList.Count; i++)
+            for (int i = 0; i < DataManager.Instance.DungeonManager.DungeonList.Count; i++)
             {
                 int index = i;
-                dungeonMenu.AddMenuItem(DataManager.Instance._dungeonManager.DungeonList[index].GetDungeonInfo(), () => DungeonResultMenu(index));
+                dungeonMenu.AddMenuItem(DataManager.Instance.DungeonManager.DungeonList[index].GetDungeonInfo(), () => DungeonResultMenu(index));
             }
 
             dungeonMenu.Run();
@@ -313,7 +344,7 @@ namespace SpartaConsoleGame
 
         public static void DungeonResultMenu(int index)
         {
-            DataManager.Instance._dungeonManager.Enter(DataManager.Instance._player, index);
+            DataManager.Instance.DungeonManager.Enter(DataManager.Instance.Player, index);
         }
 
         public static void RestMenu()
@@ -322,11 +353,11 @@ namespace SpartaConsoleGame
             Menu restMenu = new Menu();
             restMenu.SetTitle("[휴식하기]");
             restMenu.SetDesc("500 G 를 내면 체력을 회복할 수 있습니다.");
-            restMenu.SetInfo(DataManager.Instance._player.GetGold);
+            restMenu.SetInfo(DataManager.Instance.Player.GetGold);
 
             restMenu.AddMenuItem("휴식하기", () =>
             {
-                string result = DataManager.Instance._player.Rest();
+                string result = DataManager.Instance.Player.Rest();
                 Console.WriteLine(result);
                 Thread.Sleep(500);
             });
