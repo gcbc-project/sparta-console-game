@@ -10,18 +10,13 @@ namespace SpartaConsoleGame
     public enum ItemType
     {
         Weapon,
-        Armor
+        Armor,
+        Misc
     }
 
     internal interface IItem
     {
-        public string Name { get; set; }
-        public string Desc { get; set; }
-        public Stats Stats { get; set; }
-        public int Price { get; set; }
-
-        public ItemType Type { get; set; }
-
+        public Item BaseItem { get; set; }
         public string GetItemInfo();
     }
 }
