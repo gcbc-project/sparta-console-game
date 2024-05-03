@@ -13,6 +13,7 @@ namespace SpartaConsoleGame
         public string Desc { get; set; }
         public Stats Stats { get; set; }
         public int Price { get; set; }
+        public int Count { get; set; }
 
         public ItemType Type { get; set; }
 
@@ -25,6 +26,7 @@ namespace SpartaConsoleGame
             Price = price;
             Type = type;
             Stats = stats.DeepCopy();
+            Count = 1;
         }
 
         public virtual Item DeepCopy()
@@ -35,6 +37,7 @@ namespace SpartaConsoleGame
             newItem.Name = this.Name;
             newItem.Desc = this.Desc;
             newItem.Price = this.Price;
+            newItem.Count = this.Count;
             newItem.Stats = this.Stats.DeepCopy();
 
             return newItem;

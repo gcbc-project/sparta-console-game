@@ -11,6 +11,7 @@ namespace SpartaConsoleGame
     {
         public Item BaseItem { get; set; }
         public bool IsPurchased { get; set; }
+        
         public ShopItem(Item item)
         {
             BaseItem = item;
@@ -22,22 +23,14 @@ namespace SpartaConsoleGame
             sb.Append($"{BaseItem.Name}\t|");
             if (BaseItem.Stats.Atk != 0)
             {
-                sb.Append($"공격력 +{BaseItem.Stats.Atk}\t|");
+                sb.Append($" 공격력 +{BaseItem.Stats.Atk}\t|");
             }
             if (BaseItem.Stats.Def != 0)
             {
-                sb.Append($"방어력 +{BaseItem.Stats.Def}\t|");
+                sb.Append($" 방어력 +{BaseItem.Stats.Def}\t|");
             }
             sb.Append($" {BaseItem.Desc}\t|");
-            if (IsPurchased)
-            {
-                sb.Append(" 구매완료");
-            }
-            else
-            {
-                sb.Append($" {BaseItem.Price} G");
-            }
-
+            sb.Append($" {BaseItem.Price} G");
             return sb.ToString();
         }
     }
