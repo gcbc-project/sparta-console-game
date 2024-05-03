@@ -31,14 +31,13 @@ namespace SpartaConsoleGame
 
         private Random _random = new Random();
 
-        public Player(string name, Stats stats, string jobLabel)
+        public Player(string name, Stats stats)
         {
             Name = name;
             Level = 1;
-            JobLabel = jobLabel;
             Stats = stats;
-            Hp = Stats.Hp;
-            Mp = Stats.Mp;
+            Hp = stats.Hp;
+            Mp = stats.Mp;
             Gold = 10000;
             MaxExpStorage = 100;
             NowExpStorage = 0;
