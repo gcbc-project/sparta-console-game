@@ -31,6 +31,7 @@ namespace SpartaConsoleGame
         public Action RefreshMenu { get; private set; }
         public bool IsExitHidden { get; private set; }
         public string ExitLabel { get; private set; } = "나가기";
+        public Func<bool> IsSkip { get; set; }
         private List<MenuItem> _menuItems;
 
         public Menu()
@@ -42,6 +43,10 @@ namespace SpartaConsoleGame
         {
             IsExitHidden = isExitHidden;
             ExitLabel = exitLabel;
+        }
+        public void SetIsSkip(Func<bool> isSkip)
+        {
+            IsSkip = isSkip;
         }
 
 
@@ -74,7 +79,6 @@ namespace SpartaConsoleGame
                 Info += () => { Console.WriteLine(info()); };
             }
         }
-
 
         public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
         {
@@ -121,6 +125,10 @@ namespace SpartaConsoleGame
         {
             while (true)
             {
+                if (IsSkip != null && IsSkip.Invoke())
+                {
+                    break;
+                }
                 Console.Clear();
                 if (RefreshMenu != null)
                 {
@@ -169,12 +177,14 @@ namespace SpartaConsoleGame
             jobMenu.SetTitle("\n[직업 선택]");
             jobMenu.SetDesc("\n직업을 선택해주세요 \n");
 
-            jobMenu.AddMenuItem("전사", () => {
-                DataManager.Instance.CreatePlayer(playerName, new Warrior());
+            jobMenu.AddMenuItem("전사", () =>
+            {
+                DataManager.Instance.CreatePlayer(new Warrior(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
-            jobMenu.AddMenuItem("마법사", () => {
-                DataManager.Instance.CreatePlayer(playerName, new Mage());
+            jobMenu.AddMenuItem("마법사", () =>
+            {
+                DataManager.Instance.CreatePlayer(new Mage(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.SetExit(true);
@@ -204,7 +214,7 @@ namespace SpartaConsoleGame
             Menu exitMenu = new Menu();
             exitMenu.SetDesc("정말 게임을 종료하시겠습니까?\n");
             exitMenu.AddMenuItem("네", () => Environment.Exit(0));
-            exitMenu.SetExit(false,"아니요");
+            exitMenu.SetExit(false, "아니요");
 
             exitMenu.Run();
         }

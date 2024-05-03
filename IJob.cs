@@ -5,7 +5,6 @@ namespace SpartaConsoleGame
 {
     public interface IJob
     {
-        string Name { get; }
-        Stats Stats { get; }
+        string JobLabel { get; set; }
     }
 }
