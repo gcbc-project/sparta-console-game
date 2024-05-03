@@ -76,8 +76,8 @@ namespace SpartaConsoleGame
             {
                 sb.Append($" ({Stats.Def} + {calculateItemDef})");
             }
-            sb.AppendLine($"\n치명타 : {Stats.Crit} %");
-            sb.AppendLine($"회피율 : {Stats.Eva} %");
+            sb.AppendLine($"\n치명타 : {(Stats.Crit-1)*100} %");
+            sb.AppendLine($"회피율 : {(Stats.Eva-1)*100} %");
             sb.AppendLine($"\nGold   : {Gold} G");
 
             return sb.ToString();
