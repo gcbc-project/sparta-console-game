@@ -1,8 +1,6 @@
 ﻿
 using SpartaConsoleGame.Enemy;
-using System.Numerics;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using SpartaConsoleGame.JsonConverts;
 
 namespace SpartaConsoleGame
@@ -48,7 +46,7 @@ namespace SpartaConsoleGame
         {
             Player = SaveManager.LoadData<Player>("Player", new JsonSerializerSettings
             {
-                Converters = { new IJobConverter() },
+                Converters = { new PlayerConverter() },
                 TypeNameHandling = TypeNameHandling.Auto
             });
             Shop = SaveManager.LoadData<Shop>("Shop");
@@ -78,8 +76,6 @@ namespace SpartaConsoleGame
             {
                 Shop.Items.Add(new ShopItem(items[i].DeepCopy()));
             }
-
-
 
             DungeonManager = new DungeonManager();
             DungeonManager.DungeonList.Add(new Dungeon("쉬운", 5, 1000, 50, new List<IEnemy> { new Minion() }, new List<DropItem> { new DropItem(items[0].DeepCopy(), 0.25f), new DropItem(items[3].DeepCopy(), 0.25f), new DropItem(new Item("작은 결정석", "쉬운 던전 보상입니다.", 1000, ItemType.Misc, new Stats()), 100) }));
