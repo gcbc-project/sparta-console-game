@@ -1,10 +1,15 @@
 using SpartaConsoleGame.Enemy;
+using SpartaConsoleGame.Skill;
 
 namespace SpartaConsoleGame
 {
-    public class Mage : IJob
+    internal class Mage : Player
     {
-        public string Name => "마법사";
-        public Stats Stats => new Stats(80, 150, 10, 5, 1.10f, 1.15f);
+        public Mage(string name)
+        : base(name, new Stats(80, 150, 10, 5, 1.10f, 1.15f))
+        {
+            Skills = new List<ISkill> { new FireBall() };
+            JobLabel = "마법사";
+        }
     }
 }

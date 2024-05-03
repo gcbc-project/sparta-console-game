@@ -1,4 +1,5 @@
 using SpartaConsoleGame.Enemy;
+using SpartaConsoleGame.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace SpartaConsoleGame
         public int Level { get; set; }
         public int Hp { get; set; }
         public Stats Stats { get; set; }
+        public List<ISkill> Skills { get; set; }
         public bool IsDead { get; set; }
 
         protected Random random;

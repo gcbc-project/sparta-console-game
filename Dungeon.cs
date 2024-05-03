@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpartaConsoleGame.Skill;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -77,6 +78,7 @@ namespace SpartaConsoleGame
                     menu.SetInfo(GetEnemiesInfo);
 
                     menu.AddMenuItem("공격", () => { BattlePhase(player); });
+                    menu.AddMenuItem("스킬", () => { BattleChoiceSkill(player); });
                     menu.SetExit(isExitHidden: true);
                 }
             });
@@ -85,58 +87,67 @@ namespace SpartaConsoleGame
             menu.Run();
         }
 
-        public void BattlePhase(Player player)
+        public void BattleChoiceSkill(Player player)
         {
+            bool isSkip = false;
+            Menu menu = new Menu();
+            menu.SetTitle("[Battle!!]");
+            menu.SetInfo(player.GetPlayerInfo, true);
+            menu.SetInfo(GetEnemiesInfo);
+
+            for (int i = 0; i < player.Skills.Count; i++)
+            {
+                ISkill skill = player.Skills[i];
+                menu.AddMenuItem(skill.GetSkillInfo(),
+                                () => { isSkip = true; BattlePhase(player, skill); },
+                                () => skill.IsUse(player));
+            }
+            menu.SetExit(exitLabel: "공격 방법 다시 선택");
+            menu.SetIsSkip(() => isSkip);
+            menu.Run();
+        }
+
+        public void BattlePhase(Player player, ISkill skill = null)
+        {
+            bool isSkip = false;
             Menu menu = new Menu();
             menu.SetTitle("[Battle!! - Phase]");
             menu.SetInfo(player.GetPlayerInfo);
             menu.SetRefreshMenu(() =>
             {
-                bool allDead = SelectEnemyList.All(enemy => enemy.IsDead);
-                if (player.IsDead)
+                for (int i = 0; i < SelectEnemyList.Count; i++)
                 {
-                    menu.SetInfo(() => "플레이어가 쓰러졌습니다.");
-                    menu.SetExit(exitLabel: "결과 페이지 이동");
-                }
-                else if (allDead)
-                {
-                    menu.SetInfo(() => "모든 적을 물리쳤습니다.");
-                    menu.SetExit(exitLabel: "결과 페이지 이동");
-                }
-                else
-                {
-                    for (int i = 0; i < SelectEnemyList.Count; i++)
+                    IEnemy enemy = SelectEnemyList[i];
+                    menu.AddMenuItem(enemy.GetEnemyInfo(), () =>
                     {
-                        IEnemy enemy = SelectEnemyList[i];
-                        menu.AddMenuItem(enemy.GetEnemyInfo(), () =>
+                        isSkip = true;
+                        AttackTurn(player, enemy, skill);
+                        SelectEnemyList.Where(e => !e.IsDead).ToList().ForEach((e) =>
                         {
-                            AttackTurn(player, enemy);
-                            SelectEnemyList.Where(e => !e.IsDead).ToList().ForEach((e) =>
+                            if (!player.IsDead)
                             {
-                                if (!player.IsDead)
-                                {
-                                    AttackTurn(e, player);
-                                }
-                            });
-                        }, () =>
-                        {
-                            if (enemy.IsDead)
-                            {
-                                Console.WriteLine("이미 처치된 적입니다.");
-                                Thread.Sleep(500);
+                                AttackTurn(e, player);
                             }
-                            return !enemy.IsDead;
                         });
-                    }
+                    }, () =>
+                    {
+                        if (enemy.IsDead)
+                        {
+                            Console.WriteLine("이미 처치된 적입니다.");
+                            Thread.Sleep(500);
+                        }
+                        return !enemy.IsDead;
+                    });
                 }
             });
             menu.SetExit(exitLabel: "취소");
+            menu.SetIsSkip(() => isSkip);
 
             menu.Run();
         }
-        public void AttackTurn(ICharacter offense, ICharacter defense)
+        public void AttackTurn(ICharacter offense, ICharacter defense, ISkill skill = null)
         {
-            int atk = offense.Attack();
+            int atk = skill != null ? skill.Use(offense) : offense.Attack();
             int prevHp = defense.Hp;
             string hp = defense.Hit(atk);
             Menu menu = new Menu();
@@ -144,7 +155,7 @@ namespace SpartaConsoleGame
             menu.SetInfo(() =>
             {
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{offense.Name} 의 공격!");
+                sb.AppendLine($"{offense.Name}의 {(skill != null ? $"{skill.Name}" : "공격")}!");
                 sb.AppendLine($"Lv.{defense.Level} {defense.Name} 을(를) 맞췄습니다. [데미지 : {atk}]\n");
                 sb.AppendLine($"Lv.{defense.Level} {defense.Name}");
                 sb.AppendLine($"HP {prevHp} => {hp}");

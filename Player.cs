@@ -1,4 +1,5 @@
 ﻿using SpartaConsoleGame.Enemy;
+using SpartaConsoleGame.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SpartaConsoleGame
 {
-    internal class Player : ICharacter
+    internal class Player : ICharacter, IJob
     {
         public string Name { get; set; }
         public int Level { get; set; }
@@ -17,8 +18,7 @@ namespace SpartaConsoleGame
         public int Mp { get; set; }
         public Stats Stats { get; set; }
         public bool IsDead { get => Hp == 0; }
-        public string Job { get; set; }
-
+        public List<ISkill> Skills { get; set; }
         public int CalculateAtk { get => Stats.Atk + CalculateItemStat(ItemType.Weapon); }
         public int CalculateDef { get => Stats.Def + CalculateItemStat(ItemType.Armor); }
 
@@ -26,16 +26,17 @@ namespace SpartaConsoleGame
         public float MaxExpStorage { get; set; }
         public float NowExpStorage { get; set; }
         public Inventory Inventory { get; set; }
+        public string JobLabel { get; set; }
+
         private Random _random = new Random();
 
-        public Player(string name, IJob job)
+        public Player(string name, Stats stats)
         {
             Name = name;
-            Job = job.Name;
             Level = 1;
-            Stats = job.Stats;
-            Hp = Stats.Hp;
-            Mp = Stats.Mp;
+            Stats = stats;
+            Hp = stats.Hp;
+            Mp = stats.Mp;
             Gold = 10000;
             MaxExpStorage = 100;
             NowExpStorage = 0;
@@ -52,8 +53,9 @@ namespace SpartaConsoleGame
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"[내정보]");
-            sb.AppendLine($"Lv.{Level} {Name} ({Job})");
+            sb.AppendLine($"Lv.{Level} {Name} ({JobLabel})");
             sb.AppendLine($"HP {Hp}/{Stats.Hp}");
+            sb.AppendLine($"MP : {Mp} / {Stats.Mp}");
             return sb.ToString();
         }
         public string GetStatus()
@@ -62,7 +64,7 @@ namespace SpartaConsoleGame
             int calculateItemDef = CalculateItemStat(ItemType.Armor);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Lv. {Level}");
-            sb.AppendLine($"{Name} ( {Job} )");
+            sb.AppendLine($"{Name} ( {JobLabel} )");
             sb.AppendLine($"EXP ({NowExpStorage} / {MaxExpStorage.ToString("N2")})");
             sb.AppendLine($"체  력 : {Hp} / {Stats.Hp}");
             sb.AppendLine($"마  나 : {Mp} / {Stats.Mp}");

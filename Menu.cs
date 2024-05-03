@@ -33,6 +33,7 @@ namespace SpartaConsoleGame
         public Action RefreshMenu { get; private set; }
         public bool IsExitHidden { get; private set; }
         public string ExitLabel { get; private set; } = "나가기";
+        public Func<bool> IsSkip { get; set; }
         private List<MenuItem> _menuItems;
 
         public Menu()
@@ -44,6 +45,10 @@ namespace SpartaConsoleGame
         {
             IsExitHidden = isExitHidden;
             ExitLabel = exitLabel;
+        }
+        public void SetIsSkip(Func<bool> isSkip)
+        {
+            IsSkip = isSkip;
         }
 
 
@@ -76,7 +81,6 @@ namespace SpartaConsoleGame
                 Info += () => { Console.WriteLine(info()); };
             }
         }
-
 
         public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
         {
@@ -123,6 +127,10 @@ namespace SpartaConsoleGame
         {
             while (true)
             {
+                if (IsSkip != null && IsSkip.Invoke())
+                {
+                    break;
+                }
                 Console.Clear();
                 if (RefreshMenu != null)
                 {
@@ -194,12 +202,12 @@ namespace SpartaConsoleGame
 
             jobMenu.AddMenuItem("전사", () =>
             {
-                DataManager.Instance.CreatePlayer(playerName, new Warrior());
+                DataManager.Instance.CreatePlayer(new Warrior(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.AddMenuItem("마법사", () =>
             {
-                DataManager.Instance.CreatePlayer(playerName, new Mage());
+                DataManager.Instance.CreatePlayer(new Mage(playerName));
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.SetExit(true);
