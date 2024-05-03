@@ -1,3 +1,4 @@
+using SpartaConsoleGame.Enemy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,9 @@ namespace SpartaConsoleGame
     {
         public string Name { get; set; }
         public int Level { get; set; }
-        public int Atk { get; set; }
-        public int Hp { get; set; }
-        public int MaxHp { get; set; }
-        public int Attack();
-        public string Hit(int damage);
+        public  Stats Stats { get; set; }
+        public  int Hp { get; set; }
+        public  int Attack();
+        public  string Hit(int damage);
     }
 }
