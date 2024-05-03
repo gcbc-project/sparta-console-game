@@ -19,7 +19,6 @@ namespace SpartaConsoleGame
         public Stats Stats { get; set; }
         public bool IsDead { get => Hp == 0; }
         public List<ISkill> Skills { get; set; }
-
         public int CalculateAtk { get => Stats.Atk + CalculateItemStat(ItemType.Weapon); }
         public int CalculateDef { get => Stats.Def + CalculateItemStat(ItemType.Armor); }
 
@@ -56,6 +55,7 @@ namespace SpartaConsoleGame
             sb.AppendLine($"[내정보]");
             sb.AppendLine($"Lv.{Level} {Name} ({JobLabel})");
             sb.AppendLine($"HP {Hp}/{Stats.Hp}");
+            sb.AppendLine($"MP : {Mp} / {Stats.Mp}");
             return sb.ToString();
         }
         public string GetStatus()
