@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using SpartaConsoleGame;
+using SpartaConsoleGame.JsonConverts;
 
 namespace SpartaConsoleGame
 {
@@ -158,9 +160,30 @@ namespace SpartaConsoleGame
             Console.WriteLine(Title);
             Console.Write(Description);
         }
+        public static void ChooseGame()
+        {
+            Menu chooseGameMenu = new Menu();
+            chooseGameMenu.AddMenuItem("새 게임", StartMenu);
+            chooseGameMenu.AddMenuItem("불러오기", () =>
+            {
+                DataManager.Instance.LoadGameData();
+                if (DataManager.Instance.Player == null)
+                {
+                    Console.WriteLine("저장된 데이터가 없습니다.");
+                    Thread.Sleep(500);
+                }
+                else
+                {
+                    MainMenu();
+                }
+            });
+            chooseGameMenu.SetExit(true);
+            chooseGameMenu.Run();
+        }
 
         public static void StartMenu()
         {
+            Console.Clear();
             Menu mainMenu = new Menu();
 
             mainMenu.SetTitle("\n스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.");
@@ -202,11 +225,29 @@ namespace SpartaConsoleGame
             mainMenu.AddMenuItem("상점", ShopMenu);
             mainMenu.AddMenuItem("던전 입장", DungeonMenu);
             mainMenu.AddMenuItem("휴식하기", RestMenu);
+            mainMenu.AddMenuItem("저장하기", SaveMenu);
             mainMenu.AddMenuItem("게임종료", ExitGame);
             mainMenu.SetExit(true);
 
             mainMenu.Run();
 
+        }
+
+        public static void SaveMenu()
+        {
+            Console.Clear();
+            Menu saveMenu = new Menu();
+            saveMenu.SetTitle("[게임 저장]");
+            saveMenu.SetDesc("게임을 저장 하시겠습니까?\n");
+            saveMenu.AddMenuItem("네", () =>
+            {
+                SaveManager.SaveData("Player", DataManager.Instance.Player);
+                SaveManager.SaveData("Shop", DataManager.Instance.Shop);
+                SaveManager.SaveData("DungeonManager", DataManager.Instance.DungeonManager);
+            });
+            saveMenu.SetExit(false, "나가기");
+
+            saveMenu.Run();
         }
         public static void ExitGame()
         {

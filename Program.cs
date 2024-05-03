@@ -9,6 +9,6 @@ internal class Program
     {
         DataManager.Instance.InitShopItem();
         DataManager.Instance.InitDungeon();
-        Menu.StartMenu();
+        Menu.ChooseGame();
     }
 }
