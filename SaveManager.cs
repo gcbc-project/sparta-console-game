@@ -27,21 +27,9 @@ namespace SpartaConsoleGame
             if (File.Exists(localFilePath))
             {
                 string json = File.ReadAllText(localFilePath);
-                // var settings = new JsonSerializerSettings
-                // {
-                //     Converters = { new IJobConverter(), new IEnemyConverter() },
-                //     TypeNameHandling = TypeNameHandling.Auto
-                // };
                 if (json != null)
                 {
-                    if (jsonSetting == null)
-                    {
-                        return JsonConvert.DeserializeObject<T>(json);
-                    }
-                    else
-                    {
-                        return JsonConvert.DeserializeObject<T>(json, jsonSetting);
-                    }
+                    return JsonConvert.DeserializeObject<T>(json, jsonSetting);
                 }
 
             }
