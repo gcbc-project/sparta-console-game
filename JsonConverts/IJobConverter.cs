@@ -17,7 +17,9 @@ namespace SpartaConsoleGame.JsonConverts
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            string jobType = reader.Value.ToString();
+            JToken token = JToken.Load(reader);
+            string jobType = token.ToObject<string>();
+
             switch (jobType)
             {
                 case "전사":

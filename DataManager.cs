@@ -24,7 +24,7 @@ namespace SpartaConsoleGame
         }
 
         [JsonProperty]
-        public Player Player { get; private set; }
+        public Player Player { get ; private set; }
         [JsonProperty]
         public Shop Shop { get; private set; }
         [JsonProperty]
@@ -39,6 +39,16 @@ namespace SpartaConsoleGame
         {
             Player = new Player(name, job);
         }
+        public void LoadGameData(Player player, Shop shop, DungeonManager dungeonManager)
+        {
+            Player = player;
+            Shop = shop;
+            DungeonManager = dungeonManager;
+        }
+        public static string GetDirectoryPath()
+        {
+            return DIR_NAME;
+        }
         public static void SaveData<T>(string fileName, T data)
         {
             string localFilePath = Path.Combine(DIR_NAME, $"{fileName}.json");
@@ -51,8 +61,7 @@ namespace SpartaConsoleGame
             File.WriteAllText(localFilePath, json);
         }
 
-        // 데이터 불러오기
-        public bool LoadData(string fileName)
+        public static T LoadData<T>(string fileName)
         {
             string localFilePath = Path.Combine(DIR_NAME, $"{fileName}.json");
             if (File.Exists(localFilePath))
@@ -63,17 +72,10 @@ namespace SpartaConsoleGame
                     Converters = { new IJobConverter(), new IEnemyConverter() },
                     TypeNameHandling = TypeNameHandling.Auto
                 };
-                var data = JsonConvert.DeserializeObject<DataManager>(jsonData, settings);
-
-                if (data != null)
-                {
-                    this.Player = data.Player;
-                    this.Shop = data.Shop;
-                    this.DungeonManager = data.DungeonManager;
-                    return true;
-                }
+                return JsonConvert.DeserializeObject<T>(jsonData, settings);
+                
             }
-            return false;
+            return default(T);
         }
 
         public void InitShopItem()

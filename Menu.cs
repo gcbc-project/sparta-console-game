@@ -156,8 +156,16 @@ namespace SpartaConsoleGame
             chooseGameMenu.AddMenuItem("새 게임", StartMenu);
             chooseGameMenu.AddMenuItem("불러오기", () =>
             {
-                if (DataManager.Instance.LoadData("GameData"))
+                string dataDirectory = DataManager.GetDirectoryPath();
+
+                bool playerDataExists = File.Exists(Path.Combine(dataDirectory, "Player.json"));
+                
+                if (playerDataExists)
                 {
+                    Player player = DataManager.LoadData<Player>("Player"); 
+                    Shop shop = DataManager.LoadData<Shop>("Shop");
+                    DungeonManager dungeonManager = DataManager.LoadData<DungeonManager>("DungeonManager");
+                    DataManager.Instance.LoadGameData(player, shop, dungeonManager);
                     MainMenu();
                 }
                 else
@@ -226,7 +234,12 @@ namespace SpartaConsoleGame
             Menu saveMenu = new Menu();
             saveMenu.SetTitle("[게임 저장]");
             saveMenu.SetDesc("게임을 저장 하시겠습니까?\n");
-            saveMenu.AddMenuItem("네", () => DataManager.SaveData("GameData", DataManager.Instance));
+            saveMenu.AddMenuItem("네", () =>
+            {
+                DataManager.SaveData("Player", DataManager.Instance.Player);
+                DataManager.SaveData("Shop", DataManager.Instance.Shop);
+                DataManager.SaveData("DungeonManager", DataManager.Instance.DungeonManager);
+            });
             saveMenu.SetExit(false, "나가기");
 
             saveMenu.Run();
