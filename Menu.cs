@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json;
-using SpartaConsoleGame;
-using SpartaConsoleGame.JsonConverts;
-
-namespace SpartaConsoleGame
+﻿namespace SpartaConsoleGame
 {
     public struct MenuItem
     {
@@ -206,11 +194,13 @@ namespace SpartaConsoleGame
             jobMenu.AddMenuItem("전사", () =>
             {
                 DataManager.Instance.CreatePlayer(new Warrior(playerName));
+                DataManager.Instance.InitGame();
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.AddMenuItem("마법사", () =>
             {
                 DataManager.Instance.CreatePlayer(new Mage(playerName));
+                DataManager.Instance.InitGame();
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
             jobMenu.SetExit(true);
