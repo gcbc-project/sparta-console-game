@@ -76,8 +76,8 @@ namespace SpartaConsoleGame
             {
                 sb.Append($" ({Stats.Def} + {calculateItemDef})");
             }
-            sb.AppendLine($"\n치명타 : {(Stats.Crit-1)*100} %");
-            sb.AppendLine($"회피율 : {(Stats.Eva-1)*100} %");
+            sb.AppendLine($"\n치명타 : {(Stats.Crit - 1) * 100} %");
+            sb.AppendLine($"회피율 : {(Stats.Eva - 1) * 100} %");
             sb.AppendLine($"\nGold   : {Gold} G");
 
             return sb.ToString();
@@ -154,10 +154,10 @@ namespace SpartaConsoleGame
             switch (itemType)
             {
                 case ItemType.Weapon:
-                    stat = Inventory.EquipedItems.Sum(item => item.Stats.Atk);
+                    stat = Inventory.EquipedItems.Sum(item => item.BaseItem.Stats.Atk);
                     break;
                 case ItemType.Armor:
-                    stat = Inventory.EquipedItems.Sum(item => item.Stats.Def);
+                    stat = Inventory.EquipedItems.Sum(item => item.BaseItem.Stats.Def);
                     break;
             }
             return stat;

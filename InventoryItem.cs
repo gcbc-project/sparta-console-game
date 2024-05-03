@@ -9,21 +9,12 @@ namespace SpartaConsoleGame
 {
     internal class InventoryItem : IItem
     {
-        public string Name { get; set; }
-        public string Desc { get; set; }
-        public Stats Stats { get; set; }
-        public int Price { get; set; }
+        public Item BaseItem { get; set; }
         public bool IsEquiped { get; set; }
 
-        public ItemType Type { get; set; }
-
-        public InventoryItem(string name, string desc, int price, ItemType type, Stats stats )
+        public InventoryItem(Item item)
         {
-            Name = name;
-            Desc = desc;
-            Price = price;
-            Stats = stats;
-            Type = type;
+            BaseItem = item;
         }
 
         public string GetItemInfo()
@@ -33,23 +24,23 @@ namespace SpartaConsoleGame
             {
                 sb.Append("[E]");
             }
-            sb.Append($"{Name}\t|");
-            if (Stats.Atk != 0)
+            sb.Append($"{BaseItem.Name}\t|");
+            if (BaseItem.Stats.Atk != 0)
             {
-                sb.Append($"공격력 {Stats.Atk}\t|");
+                sb.Append($"공격력 {BaseItem.Stats.Atk}\t|");
             }
-            if (Stats.Def != 0)
+            if (BaseItem.Stats.Def != 0)
             {
-                sb.Append($"방어력 {Stats.Def}\t|");
+                sb.Append($"방어력 {BaseItem.Stats.Def}\t|");
             }
-            sb.Append($"{Desc}");
+            sb.Append($"{BaseItem.Desc}");
 
             return sb.ToString();
         }
 
         public static explicit operator InventoryItem(ShopItem v)
         {
-            return new InventoryItem(v.Name, v.Desc, v.Price, v.Type, v.Stats);
+            return new InventoryItem(v.BaseItem.DeepCopy());
         }
     }
 }

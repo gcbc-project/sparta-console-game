@@ -29,11 +29,11 @@ namespace SpartaConsoleGame
             {
                 Console.WriteLine("구매 완료된 아이템 입니다.");
             }
-            else if (Items[shopItemindex].Price <= player.Gold)
+            else if (Items[shopItemindex].BaseItem.Price <= player.Gold)
             {
                 Items[shopItemindex].IsPurchased = true;
                 player.Inventory.Items.Add((InventoryItem)Items[shopItemindex]);
-                player.Gold -= Items[shopItemindex].Price;
+                player.Gold -= Items[shopItemindex].BaseItem.Price;
 
                 Console.WriteLine("구매를 완료했습니다.");
             }
@@ -45,8 +45,8 @@ namespace SpartaConsoleGame
         }
         public void Sell(Player player, int inventoryItemindex)
         {
-            int sellItemPrice = Convert.ToInt32(Math.Round(Items[inventoryItemindex].Price * 0.85f));
-            ShopItem? findShopItem = Items.Find(item => item.Name == player.Inventory.Items[inventoryItemindex].Name);
+            int sellItemPrice = Convert.ToInt32(Math.Round(Items[inventoryItemindex].BaseItem.Price * 0.85f));
+            ShopItem? findShopItem = Items.Find(item => item.BaseItem.Id == player.Inventory.Items[inventoryItemindex].BaseItem.Id);
             if (findShopItem != null)
             {
                 findShopItem.IsPurchased = false;
