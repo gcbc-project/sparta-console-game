@@ -9,43 +9,33 @@ namespace SpartaConsoleGame
 {
     internal class ShopItem : IItem
     {
-        public string Name { get; set; }
-        public string Desc { get; set; }
-        public Stats Stats { get; set; }
-        public int Price { get; set; }
-
+        public Item BaseItem { get; set; }
         public bool IsPurchased { get; set; }
-        public ItemType Type { get; set; }
-
-        public ShopItem(string name, string desc, int price, ItemType type, Stats stats)
+        public ShopItem(Item item)
         {
-            Name = name;
-            Desc = desc;
-            Price = price;
-            Type = type;
-            Stats = stats;
+            BaseItem = item;
         }
 
         public string GetItemInfo()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{Name}\t|");
-            if (Stats.Atk != 0)
+            sb.Append($"{BaseItem.Name}\t|");
+            if (BaseItem.Stats.Atk != 0)
             {
-                sb.Append($"공격력 +{Stats.Atk}\t|");
+                sb.Append($"공격력 +{BaseItem.Stats.Atk}\t|");
             }
-            if (Stats.Def != 0)
+            if (BaseItem.Stats.Def != 0)
             {
-                sb.Append($"방어력 +{Stats.Def}\t|");
+                sb.Append($"방어력 +{BaseItem.Stats.Def}\t|");
             }
-            sb.Append($" {Desc}\t|");
+            sb.Append($" {BaseItem.Desc}\t|");
             if (IsPurchased)
             {
                 sb.Append(" 구매완료");
             }
             else
             {
-                sb.Append($" {Price} G");
+                sb.Append($" {BaseItem.Price} G");
             }
 
             return sb.ToString();

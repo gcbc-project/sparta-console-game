@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpartaConsoleGame.Enemy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -16,17 +17,20 @@ namespace SpartaConsoleGame
         public float ExpReward { get; set; }
         public List<IEnemy> EnemyList { get; set; }
         private List<IEnemy> SelectEnemyList { get; set; }
-        private List<ShopItem> rewardItems { get; set; }
+        public List<DropItem> DropItems { get; set; }
 
+        public Item RelicItem { get; private set; }
 
         private Random _random = new Random();
-        public Dungeon(string title, int recommendDefense, int basicReward, float expReward, List<IEnemy> enemyList)
+        public Dungeon(string title, int recommendDefense, int basicReward, float expReward, List<IEnemy> enemyList, List<DropItem> dropItems)
         {
             Title = title;
             RecommendDefense = recommendDefense;
             BasicReward = basicReward;
             ExpReward = expReward;
             EnemyList = enemyList;
+            DropItems = dropItems;
+
         }
 
         public string GetDungeonInfo()
@@ -177,19 +181,21 @@ namespace SpartaConsoleGame
 
 
 
-        public void SetRewardItems( Menu menu, Player player)
+        public void SetRewardItems(Menu menu, Player player)
         {
-            rewardItems = new List<ShopItem>();
-        
-            foreach (var item in rewardItems)
+            List<DropItem> dropItems = DropItems;
+
+            foreach (var item in dropItems)
             {
                 int itemRandom = _random.Next(0, 100);
-                if (itemRandom <= item.DropRate)
+                if (itemRandom <= item.DropRate * 100)
                 {
-                    player.Inventory.Items.Add((InventoryItem)item);                   
-                    menu.SetInfo(() => $" {item.Name}, 가격: {item.Price}\n");
+                    player.Inventory.AddItem(item.BaseItem);
+                    menu.SetInfo(() => $"{item.GetItemInfo()}\n");
                 }
             }
         }
+
+        
     }
 }
