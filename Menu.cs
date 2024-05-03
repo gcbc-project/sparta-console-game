@@ -31,6 +31,7 @@ namespace SpartaConsoleGame
         public Action RefreshMenu { get; private set; }
         public bool IsExitHidden { get; private set; }
         public string ExitLabel { get; private set; } = "나가기";
+        public Func<bool> IsSkip { get; set; }
         private List<MenuItem> _menuItems;
 
         public Menu()
@@ -42,6 +43,10 @@ namespace SpartaConsoleGame
         {
             IsExitHidden = isExitHidden;
             ExitLabel = exitLabel;
+        }
+        public void SetIsSkip(Func<bool> isSkip)
+        {
+            IsSkip = isSkip;
         }
 
 
@@ -74,7 +79,6 @@ namespace SpartaConsoleGame
                 Info += () => { Console.WriteLine(info()); };
             }
         }
-
 
         public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
         {
@@ -121,6 +125,10 @@ namespace SpartaConsoleGame
         {
             while (true)
             {
+                if (IsSkip != null && IsSkip.Invoke())
+                {
+                    break;
+                }
                 Console.Clear();
                 if (RefreshMenu != null)
                 {
