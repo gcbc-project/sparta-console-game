@@ -42,13 +42,7 @@ namespace SpartaConsoleGame
         public void Sell(Player player, int inventoryItemindex)
         {
             int sellItemPrice = Convert.ToInt32(Math.Round(player.Inventory.Items[inventoryItemindex].BaseItem.Price * 0.85f));
-            ShopItem? findShopItem = Items.Find(item => item.BaseItem.Id == player.Inventory.Items[inventoryItemindex].BaseItem.Id);
-            if (findShopItem != null)
-            {
-                findShopItem.IsPurchased = false;
-            }
             player.Inventory.RemoveItem(player.Inventory.Items[inventoryItemindex].BaseItem);
-            // player.Inventory.Items.RemoveAt(inventoryItemindex);
             player.Gold += sellItemPrice;
             Console.WriteLine($"\n{sellItemPrice}G에 판매를 완료했습니다.");
             Thread.Sleep(500);
