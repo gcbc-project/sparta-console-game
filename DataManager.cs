@@ -1,11 +1,15 @@
 ﻿
 using SpartaConsoleGame.Enemy;
 using System.Numerics;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using SpartaConsoleGame.JsonConverts;
 
 namespace SpartaConsoleGame
 {
     internal class DataManager
     {
+        const string DIR_NAME = "data";
         private static DataManager _instance;
         public static DataManager Instance
         {
@@ -19,8 +23,11 @@ namespace SpartaConsoleGame
             }
         }
 
+        [JsonProperty]
         public Player Player { get; private set; }
+        [JsonProperty]
         public Shop Shop { get; private set; }
+        [JsonProperty]
         public DungeonManager DungeonManager { get; private set; }
 
         public DataManager()
@@ -32,7 +39,42 @@ namespace SpartaConsoleGame
         {
             Player = new Player(name, job);
         }
+        public static void SaveData<T>(string fileName, T data)
+        {
+            string localFilePath = Path.Combine(DIR_NAME, $"{fileName}.json");
 
+            string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+            if (!Directory.Exists(DIR_NAME))
+            {
+                Directory.CreateDirectory(DIR_NAME);
+            }
+            File.WriteAllText(localFilePath, json);
+        }
+
+        // 데이터 불러오기
+        public bool LoadData(string fileName)
+        {
+            string localFilePath = Path.Combine(DIR_NAME, $"{fileName}.json");
+            if (File.Exists(localFilePath))
+            {
+                string jsonData = File.ReadAllText(localFilePath);
+                var settings = new JsonSerializerSettings
+                {
+                    Converters = { new IJobConverter(), new IEnemyConverter() },
+                    TypeNameHandling = TypeNameHandling.Auto
+                };
+                var data = JsonConvert.DeserializeObject<DataManager>(jsonData, settings);
+
+                if (data != null)
+                {
+                    this.Player = data.Player;
+                    this.Shop = data.Shop;
+                    this.DungeonManager = data.DungeonManager;
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public void InitShopItem()
         {

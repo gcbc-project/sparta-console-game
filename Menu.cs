@@ -154,24 +154,22 @@ namespace SpartaConsoleGame
         {
             Menu chooseGameMenu = new Menu();
             chooseGameMenu.AddMenuItem("새 게임", StartMenu);
-            chooseGameMenu.AddMenuItem("불러오기", () => 
+            chooseGameMenu.AddMenuItem("불러오기", () =>
             {
-                if (DataManager.Instance.LoadData())
+                if (DataManager.Instance.LoadData("GameData"))
                 {
-                    
                     MainMenu();
                 }
                 else
                 {
                     Console.WriteLine("저장된 데이터가 없습니다.");
                     Thread.Sleep(500);
-                    
                 }
             });
             chooseGameMenu.SetExit(true);
             chooseGameMenu.Run();
         }
-        
+
         public static void StartMenu()
         {
             Console.Clear();
@@ -239,7 +237,7 @@ namespace SpartaConsoleGame
             Menu exitMenu = new Menu();
             exitMenu.SetDesc("정말 게임을 종료하시겠습니까?\n");
             exitMenu.AddMenuItem("네", () => Environment.Exit(0));
-            exitMenu.SetExit(false,"아니요");
+            exitMenu.SetExit(false, "아니요");
 
             exitMenu.Run();
         }
