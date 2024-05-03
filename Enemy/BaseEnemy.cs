@@ -14,7 +14,6 @@ namespace SpartaConsoleGame
         public int Hp { get; set; }
         public Stats Stats { get; set; }
         public bool IsDead { get; set; }
-        public int MaxHp { get; set; }
 
         protected Random random;
         public BaseEnemy(Stats stats)
@@ -33,7 +32,7 @@ namespace SpartaConsoleGame
             }
             else
             {
-                sb.Append($"HP {Hp}");
+                sb.Append($"HP {Hp} / {Stats.Hp}");
             }
             return sb.ToString();
         }

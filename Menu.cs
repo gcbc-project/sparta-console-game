@@ -20,6 +20,7 @@ namespace SpartaConsoleGame
             Label = label;
             Action = action;
             IsAction = isAction;
+
         }
     }
 
@@ -32,6 +33,8 @@ namespace SpartaConsoleGame
         public bool IsExitHidden { get; private set; }
         public string ExitLabel { get; private set; } = "나가기";
         private List<MenuItem> _menuItems;
+
+
 
         public Menu()
         {
@@ -169,11 +172,13 @@ namespace SpartaConsoleGame
             jobMenu.SetTitle("\n[직업 선택]");
             jobMenu.SetDesc("\n직업을 선택해주세요 \n");
 
-            jobMenu.AddMenuItem("전사", () => {
+            jobMenu.AddMenuItem("전사", () =>
+            {
                 DataManager.Instance.CreatePlayer(playerName, new Warrior());
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
-            jobMenu.AddMenuItem("마법사", () => {
+            jobMenu.AddMenuItem("마법사", () =>
+            {
                 DataManager.Instance.CreatePlayer(playerName, new Mage());
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
@@ -204,7 +209,7 @@ namespace SpartaConsoleGame
             Menu exitMenu = new Menu();
             exitMenu.SetDesc("정말 게임을 종료하시겠습니까?\n");
             exitMenu.AddMenuItem("네", () => Environment.Exit(0));
-            exitMenu.SetExit(false,"아니요");
+            exitMenu.SetExit(false, "아니요");
 
             exitMenu.Run();
         }
@@ -333,6 +338,7 @@ namespace SpartaConsoleGame
             Menu dungeonMenu = new Menu();
             dungeonMenu.SetTitle("[던전 입장]\n");
             dungeonMenu.SetDesc("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+
             for (int i = 0; i < DataManager.Instance.DungeonManager.DungeonList.Count; i++)
             {
                 int index = i;
@@ -344,7 +350,9 @@ namespace SpartaConsoleGame
 
         public static void DungeonResultMenu(int index)
         {
+
             DataManager.Instance.DungeonManager.Enter(DataManager.Instance.Player, index);
+
         }
 
         public static void RestMenu()
