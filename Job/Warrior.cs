@@ -4,7 +4,11 @@ namespace SpartaConsoleGame
 {
     public class Warrior : IJob
     {
-        public string Name => "Àü»ç";
+        public string Name => "ì „ì‚¬";
+        public Warrior()
+        {
+        }
+
         public Stats Stats => new Stats(120, 50, 15, 10, 1.15f, 1.05f);
     }
 }

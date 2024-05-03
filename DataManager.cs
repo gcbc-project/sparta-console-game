@@ -9,7 +9,6 @@ namespace SpartaConsoleGame
 {
     internal class DataManager
     {
-        const string DIR_NAME = "data";
         private static DataManager _instance;
         public static DataManager Instance
         {
@@ -24,7 +23,7 @@ namespace SpartaConsoleGame
         }
 
         [JsonProperty]
-        public Player Player { get ; private set; }
+        public Player Player { get; private set; }
         [JsonProperty]
         public Shop Shop { get; private set; }
         [JsonProperty]
@@ -39,43 +38,19 @@ namespace SpartaConsoleGame
         {
             Player = new Player(name, job);
         }
-        public void LoadGameData(Player player, Shop shop, DungeonManager dungeonManager)
+        public void LoadGameData()
         {
-            Player = player;
-            Shop = shop;
-            DungeonManager = dungeonManager;
-        }
-        public static string GetDirectoryPath()
-        {
-            return DIR_NAME;
-        }
-        public static void SaveData<T>(string fileName, T data)
-        {
-            string localFilePath = Path.Combine(DIR_NAME, $"{fileName}.json");
-
-            string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-            if (!Directory.Exists(DIR_NAME))
+            Player = SaveManager.LoadData<Player>("Player", new JsonSerializerSettings
             {
-                Directory.CreateDirectory(DIR_NAME);
-            }
-            File.WriteAllText(localFilePath, json);
-        }
-
-        public static T LoadData<T>(string fileName)
-        {
-            string localFilePath = Path.Combine(DIR_NAME, $"{fileName}.json");
-            if (File.Exists(localFilePath))
+                Converters = { new IJobConverter() },
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+            Shop = SaveManager.LoadData<Shop>("Shop");
+            DungeonManager = SaveManager.LoadData<DungeonManager>("DungeonManager", new JsonSerializerSettings
             {
-                string jsonData = File.ReadAllText(localFilePath);
-                var settings = new JsonSerializerSettings
-                {
-                    Converters = { new IJobConverter(), new IEnemyConverter() },
-                    TypeNameHandling = TypeNameHandling.Auto
-                };
-                return JsonConvert.DeserializeObject<T>(jsonData, settings);
-                
-            }
-            return default(T);
+                Converters = { new IEnemyConverter() },
+                TypeNameHandling = TypeNameHandling.Auto
+            });
         }
 
         public void InitShopItem()

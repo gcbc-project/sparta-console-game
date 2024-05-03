@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using SpartaConsoleGame;
+using SpartaConsoleGame.JsonConverts;
 
 namespace SpartaConsoleGame
 {
@@ -156,22 +158,15 @@ namespace SpartaConsoleGame
             chooseGameMenu.AddMenuItem("새 게임", StartMenu);
             chooseGameMenu.AddMenuItem("불러오기", () =>
             {
-                string dataDirectory = DataManager.GetDirectoryPath();
-
-                bool playerDataExists = File.Exists(Path.Combine(dataDirectory, "Player.json"));
-                
-                if (playerDataExists)
-                {
-                    Player player = DataManager.LoadData<Player>("Player"); 
-                    Shop shop = DataManager.LoadData<Shop>("Shop");
-                    DungeonManager dungeonManager = DataManager.LoadData<DungeonManager>("DungeonManager");
-                    DataManager.Instance.LoadGameData(player, shop, dungeonManager);
-                    MainMenu();
-                }
-                else
+                DataManager.Instance.LoadGameData();
+                if (DataManager.Instance.Player == null)
                 {
                     Console.WriteLine("저장된 데이터가 없습니다.");
                     Thread.Sleep(500);
+                }
+                else
+                {
+                    MainMenu();
                 }
             });
             chooseGameMenu.SetExit(true);
@@ -197,11 +192,13 @@ namespace SpartaConsoleGame
             jobMenu.SetTitle("\n[직업 선택]");
             jobMenu.SetDesc("\n직업을 선택해주세요 \n");
 
-            jobMenu.AddMenuItem("전사", () => {
+            jobMenu.AddMenuItem("전사", () =>
+            {
                 DataManager.Instance.CreatePlayer(playerName, new Warrior());
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
-            jobMenu.AddMenuItem("마법사", () => {
+            jobMenu.AddMenuItem("마법사", () =>
+            {
                 DataManager.Instance.CreatePlayer(playerName, new Mage());
                 MainMenu();  // 직업 선택 후 메인 메뉴 호출
             });
@@ -236,9 +233,9 @@ namespace SpartaConsoleGame
             saveMenu.SetDesc("게임을 저장 하시겠습니까?\n");
             saveMenu.AddMenuItem("네", () =>
             {
-                DataManager.SaveData("Player", DataManager.Instance.Player);
-                DataManager.SaveData("Shop", DataManager.Instance.Shop);
-                DataManager.SaveData("DungeonManager", DataManager.Instance.DungeonManager);
+                SaveManager.SaveData("Player", DataManager.Instance.Player);
+                SaveManager.SaveData("Shop", DataManager.Instance.Shop);
+                SaveManager.SaveData("DungeonManager", DataManager.Instance.DungeonManager);
             });
             saveMenu.SetExit(false, "나가기");
 
