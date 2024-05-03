@@ -11,17 +11,10 @@ namespace SpartaConsoleGame.Skill
         public override string Desc => "적에게 200%로 1회 일격을 가한다.";
         public override int MPCost => 3;
 
-        public override void Use(ICharacter character)
+        public override int Use(ICharacter character)
         {
-            if (character.Stats.Mp >= MPCost)
-            {
-                character.Stats.Mp -= MPCost;
-                int damage = (int)Math.Cosh(character.Stats.Atk * 2.0f);
-            }
-            else
-            {
-                Console.WriteLine("Not enough MP to use this skill.");
-            }
+            character.Stats.Mp -= MPCost;
+            return (int)Math.Ceiling(character.Attack() * 2.0f);
         }
     }
 }

@@ -12,7 +12,16 @@ namespace SpartaConsoleGame.Skill
         public abstract string Desc { get; }
         public abstract int MPCost { get; }
 
-        public abstract void Use(ICharacter character);
+        public abstract int Use(ICharacter character);
+        public virtual bool IsUse(ICharacter character)
+        {
+            if (character.Stats.Mp < MPCost)
+            {
+                Console.WriteLine("MP가 부족하여 스킬을 사용할 수 없습니다.");
+                Thread.Sleep(500);
+            }
+            return character.Stats.Mp >= MPCost;
+        }
         public virtual string GetSkillInfo()
         {
             StringBuilder sb = new StringBuilder();
