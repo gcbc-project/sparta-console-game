@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SpartaConsoleGame
 {
@@ -14,6 +16,9 @@ namespace SpartaConsoleGame
         public float ExpReward { get; set; }
         public List<IEnemy> EnemyList { get; set; }
         private List<IEnemy> SelectEnemyList { get; set; }
+        private List<ShopItem> rewardItems { get; set; }
+
+
         private Random _random = new Random();
         public Dungeon(string title, int recommendDefense, int basicReward, float expReward, List<IEnemy> enemyList)
         {
@@ -46,6 +51,9 @@ namespace SpartaConsoleGame
             {
                 menu.SetInfo(() => $"Victory\n", true);
                 menu.SetInfo(() => $"던전에서 몬스터 {SelectEnemyList.Count}마리를 잡았습니다.\n");
+                menu.SetInfo(() => $"보상 목록\n");
+                SetRewardItems( menu, player);
+
             }
             else
             {
@@ -164,6 +172,23 @@ namespace SpartaConsoleGame
             {
                 int index = _random.Next(EnemyList.Count);
                 SelectEnemyList.Add(EnemyList[index].DeepCopy());
+            }
+        }
+
+
+
+        public void SetRewardItems( Menu menu, Player player)
+        {
+            rewardItems = new List<ShopItem>();
+        
+            foreach (var item in rewardItems)
+            {
+                int itemRandom = _random.Next(0, 100);
+                if (itemRandom <= item.DropRate)
+                {
+                    player.Inventory.Items.Add((InventoryItem)item);                   
+                    menu.SetInfo(() => $" {item.Name}, 가격: {item.Price}\n");
+                }
             }
         }
     }

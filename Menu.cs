@@ -171,7 +171,7 @@ namespace SpartaConsoleGame
             mainMenu.AddMenuItem("상태보기", StatusMenu);
             mainMenu.AddMenuItem("인벤토리", InvenMenu);
             mainMenu.AddMenuItem("상점", ShopMenu);
-            mainMenu.AddMenuItem("던전 입장", DungeonMenu);
+            mainMenu.AddMenuItem("던전 입장", DungeonMenu, () => !DataManager.Instance._player.IsDead);
             mainMenu.AddMenuItem("휴식하기", RestMenu);
 
             mainMenu.Run();
