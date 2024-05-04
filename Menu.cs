@@ -119,25 +119,33 @@
         {
             Title?.Display();
             Description?.Display();
-            Info?.Invoke();
-            for (int i = 0; i < _menuItems.Count; i++)
+            if (Info != null)
             {
-                Console.Write($"{i + 1}. ");
-                _menuItems[i].Label?.Display();
+                Console.WriteLine();
+                Info?.Invoke();
+            }
+            if (_menuItems.Count != 0)
+            {
+                Console.WriteLine();
+                for (int i = 0; i < _menuItems.Count; i++)
+                {
+                    Console.Write($"{i + 1}. ");
+                    _menuItems[i].Label?.Display();
+                }
+                Console.WriteLine();
             }
 
             if (IsExitHidden == false)
             {
-                Console.Write($"\n0. ");
+                Console.Write($"0. ");
                 ExitLabel?.Display();
             }
         }
 
         public int HandleChoice()
         {
-
-
-            Console.Write("\n원하시는 행동을 입력해주세요. >> ");
+            Console.WriteLine();
+            Console.Write("원하시는 행동을 입력해주세요. >> ");
             string choice = Console.ReadLine();
 
             if (int.TryParse(choice, out int c) && c <= _menuItems.Count)
@@ -216,8 +224,8 @@
             Console.Clear();
             Menu mainMenu = new Menu();
 
-            mainMenu.SetTitle("\n스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.");
-            mainMenu.SetDesc("\n이름을 입력해주세요 : ", isNewLine: false);
+            mainMenu.SetTitle("스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.\n");
+            mainMenu.SetDesc("이름을 입력해주세요 : ", isNewLine: false);
             mainMenu.StartMenuDesc();
             string playerName = Console.ReadLine();
 
@@ -227,8 +235,8 @@
         public static void JobChoiceMenu(string playerName)
         {
             Menu jobMenu = new Menu();
-            jobMenu.SetTitle("\n[직업 선택]");
-            jobMenu.SetDesc("\n직업을 선택해주세요 \n");
+            jobMenu.SetTitle("[직업 선택]");
+            jobMenu.SetDesc("직업을 선택해주세요");
 
             jobMenu.AddMenuItem("전사", () =>
             {
@@ -250,7 +258,7 @@
         {
             Menu mainMenu = new Menu();
             mainMenu.SetTitle("스파르타 마을에 오신 것을 환영합니다!");
-            mainMenu.SetDesc("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n");
+            mainMenu.SetDesc("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.");
 
             mainMenu.AddMenuItem("상태보기", StatusMenu);
             mainMenu.AddMenuItem("인벤토리", InvenMenu);
@@ -316,7 +324,7 @@
 
                 if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
-                    return "인벤토리가 비었습니다\n";
+                    return new ConsoleBuilder("인벤토리가 비었습니다\n");
                 }
                 else
                 {

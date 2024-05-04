@@ -13,13 +13,12 @@ namespace SpartaConsoleGame
             Items = new List<InventoryItem>();
         }
 
-        public string GetItemsInfo()
+        public ConsoleBuilder GetItemsInfo()
         {
-            StringBuilder sb = new StringBuilder();
-            Items.ForEach(item => { sb.AppendLine(item.GetItemInfo()); });
-            return sb.ToString();
+            ConsoleBuilder cb = new ConsoleBuilder();
+            Items.ForEach(item => { cb.Combine(item.GetItemInfo()); });
+            return cb;
         }
-
         public void EquipedItem(int itemIndex)
         {
             InventoryItem? findItem = Items.Find(item => item.IsEquiped && Items[itemIndex].BaseItem.Type == item.BaseItem.Type);
