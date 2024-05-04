@@ -19,15 +19,15 @@ namespace SpartaConsoleGame
     }
     public class ConsoleBuilder
     {
-        private List<ConsoleLine> _lines { get; set; }
+        public List<ConsoleLine> Line { get; private set; }
 
         public ConsoleBuilder()
         {
-            _lines = new List<ConsoleLine>();
+            Line = new List<ConsoleLine>();
         }
         public ConsoleBuilder(string text, Func<bool> isColor = null, ConsoleColor color = ConsoleColor.White, bool isNewLine = true)
         {
-            _lines = new List<ConsoleLine>();
+            Line = new List<ConsoleLine>();
             if (isNewLine)
             {
                 AppendLine(text, isColor, color);
@@ -40,19 +40,26 @@ namespace SpartaConsoleGame
 
         public ConsoleBuilder AppendLine(string text, Func<bool> isColor = null, ConsoleColor color = ConsoleColor.White)
         {
-            _lines.Add(new ConsoleLine($"{text}\n", isColor, color));
+            Line.Add(new ConsoleLine($"{text}\n", isColor, color));
             return this;
         }
 
         public ConsoleBuilder Append(string text, Func<bool> isColor = null, ConsoleColor color = ConsoleColor.White)
         {
-            _lines.Add(new ConsoleLine(text, isColor, color));
+            Line.Add(new ConsoleLine(text, isColor, color));
             return this;
         }
 
+        public ConsoleBuilder Combine(ConsoleBuilder cb)
+        {
+            Line.AddRange(cb.Line);
+            return this;
+        }
+
+
         public void Display()
         {
-            _lines.ForEach(line =>
+            Line.ForEach(line =>
             {
                 if (line.IsColor != null && line.IsColor.Invoke())
                 {
