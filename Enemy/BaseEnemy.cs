@@ -23,7 +23,7 @@ namespace SpartaConsoleGame
             random = new Random();
             Stats = stats;
         }
-        public virtual string GetEnemyInfo()
+        public virtual ConsoleBuilder GetEnemyInfo()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append($"Lv.{Level} ");
@@ -36,7 +36,7 @@ namespace SpartaConsoleGame
             {
                 sb.Append($"HP {Hp} / {Stats.Hp}");
             }
-            return sb.ToString();
+            return new ConsoleBuilder(sb.ToString(), () => IsDead, ConsoleColor.Red);
         }
         public virtual string Hit(int damage)
         {

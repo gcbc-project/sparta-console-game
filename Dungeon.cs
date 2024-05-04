@@ -1,5 +1,5 @@
 ﻿using SpartaConsoleGame.Enemy;
-﻿using SpartaConsoleGame.Skill;
+using SpartaConsoleGame.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,11 +42,11 @@ namespace SpartaConsoleGame
             return sb.ToString();
         }
 
-        private string GetEnemiesInfo()
+        private ConsoleBuilder GetEnemiesInfo()
         {
-            StringBuilder sb = new StringBuilder();
-            SelectEnemyList.ForEach(enemy => { sb.AppendLine(enemy.GetEnemyInfo()); });
-            return sb.ToString();
+            ConsoleBuilder cb = new ConsoleBuilder();
+            SelectEnemyList.ForEach(enemy => { cb.Combine(enemy.GetEnemyInfo()); });
+            return cb;
         }
 
         private void Result(Menu menu, Player player, int prevHp, bool isClear)
@@ -57,7 +57,7 @@ namespace SpartaConsoleGame
                 menu.SetInfo(() => $"Victory\n", true);
                 menu.SetInfo(() => $"던전에서 몬스터 {SelectEnemyList.Count}마리를 잡았습니다.\n");
                 menu.SetInfo(() => $"보상 목록\n");
-                SetRewardItems( menu, player);
+                SetRewardItems(menu, player);
 
             }
             else
@@ -207,6 +207,6 @@ namespace SpartaConsoleGame
             }
         }
 
-        
+
     }
 }

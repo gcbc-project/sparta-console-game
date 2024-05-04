@@ -9,7 +9,7 @@ namespace SpartaConsoleGame
     {
         bool IsDead { get; set; }
 
-        string GetEnemyInfo();
+        ConsoleBuilder GetEnemyInfo();
 
         void Die();
         BaseEnemy DeepCopy();
