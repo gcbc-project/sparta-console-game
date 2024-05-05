@@ -14,9 +14,22 @@ namespace SpartaConsoleGame
         }
 
         public string GetItemsInfo()
+        public string GetItemsInfo(params ItemType[] itemTypes)
         {
             StringBuilder sb = new StringBuilder();
             Items.ForEach(item => { sb.AppendLine(item.GetItemInfo()); });
+
+            foreach (var itemType in itemTypes)
+            {
+                // ItemType에 따라 필터링하여 해당 아이템들만 처리
+                var itemsOfType = Items.Where(item => item.BaseItem.Type == itemType);
+
+                foreach (var item in itemsOfType)
+                {
+                    sb.AppendLine(item.GetItemInfo());
+                }
+            }
+
             return sb.ToString();
         }
 
