@@ -281,10 +281,11 @@
                 }
                 else
                 {
-                    return DataManager.Instance.Player.Inventory.GetItemsInfo();
+                    return DataManager.Instance.Player.Inventory.GetItemsInfo( ItemType.Weapon, ItemType.Armor, ItemType.ConsumableItem, ItemType.Misc);
                 }
             });
             invenMenu.AddMenuItem("장착관리", EquipMenu);
+            invenMenu.AddMenuItem("소비 아이템 사용", ConsumableItemMenu);
 
             invenMenu.Run();
         }
@@ -295,27 +296,60 @@
 
             Menu equipMenu = new Menu();
 
-            equipMenu.SetTitle("[인벤토리]");
+            equipMenu.SetTitle("[장착 메뉴]");
             equipMenu.SetRefreshMenu(() =>
             {
-                for (int i = 0; i < DataManager.Instance.Player.Inventory.Items.Count; i++)
+                var equipmentItems = DataManager.Instance.Player.Inventory.Items;
+                for (int i = 0; i < equipmentItems.Count; i++)
                 {
-                    int index = i;
-                    equipMenu.AddMenuItem(DataManager.Instance.Player.Inventory.Items[index].GetItemInfo(), () => { DataManager.Instance.Player.Inventory.EquipedItem(index); });
-
+                    var item = equipmentItems[i];
+                    if (item.BaseItem.Type == ItemType.Weapon || item.BaseItem.Type == ItemType.Armor)
+                    {
+                        int index = i;
+                        equipMenu.AddMenuItem(item.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.EquipedItem(index); });
+                    }
                 }
             });
             equipMenu.SetInfo(() =>
             {
                 if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
-                    return "인벤토리이 비었습니다";
+                    return "인벤토리가 비었습니다";
                 }
                 return null;
-
-
             });
             equipMenu.Run();
+        }
+
+        public static void ConsumableItemMenu()
+        {
+            Console.Clear();
+
+            Menu consumableItemMenu = new Menu();
+
+            consumableItemMenu.SetTitle("[아이템 사용 메뉴]");
+            consumableItemMenu.SetRefreshMenu(() =>
+            {
+                var consumableItems = DataManager.Instance.Player.Inventory.Items;
+                for (int i = 0; i < consumableItems.Count; i++)
+                {
+                    var item = consumableItems[i];
+                    if (item.BaseItem.Type == ItemType.ConsumableItem)
+                    {
+                        int index = i;
+                        consumableItemMenu.AddMenuItem(item.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.UsingItem(index); });
+                    }
+                }
+            });
+            consumableItemMenu.SetInfo(() =>
+            {
+                if (DataManager.Instance.Player.Inventory.Items.Count == 0)
+                {
+                    return "인벤토리가 비었습니다";
+                }
+                return null;
+            });
+            consumableItemMenu.Run();
         }
 
         public static void ShopMenu()
