@@ -38,6 +38,16 @@ namespace SpartaConsoleGame
             }
             return sb.ToString();
         }
+        public virtual int Attack(out bool isCriticalHit)
+        {
+            int baseDamage = random.Next((int)Math.Round(Stats.Atk * 0.9f), (int)Math.Round(Stats.Atk * 1.1f));
+            isCriticalHit = random.NextDouble() < (Stats.Crit - 1);
+            if (isCriticalHit)
+            {
+                baseDamage = (int)(baseDamage * 1.6); // 치명타일 때 160% 데미지 적용
+            }
+            return baseDamage;
+        }
         public string Hit(int damage, out bool isDodged, bool allowDodge = true)
         {
             isDodged = false;
@@ -54,16 +64,6 @@ namespace SpartaConsoleGame
                 return "Dead";
             }
             return Hp.ToString();
-        }
-        public virtual int Attack(out bool isCriticalHit)
-        {
-            int baseDamage = random.Next((int)Math.Round(Stats.Atk * 0.9f), (int)Math.Round(Stats.Atk * 1.1f));
-            isCriticalHit = random.NextDouble() < (Stats.Crit - 1);
-            if (isCriticalHit)
-            {
-                baseDamage = (int)(baseDamage * 1.6); // 치명타일 때 160% 데미지 적용
-            }
-            return baseDamage;
         }
 
         public virtual void Die()
