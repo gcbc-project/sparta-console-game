@@ -202,7 +202,7 @@ namespace SpartaConsoleGame
                 if (itemRandom <= item.DropRate * 100)
                 {
                     player.Inventory.AddItem(item.BaseItem);
-                    menu.SetInfo(() => $"{item.GetItemInfo()}\n");
+                    menu.SetInfo(item.GetItemInfo);
                 }
             }
         }
