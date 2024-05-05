@@ -13,11 +13,9 @@ namespace SpartaConsoleGame
             Items = new List<InventoryItem>();
         }
 
-        public string GetItemsInfo()
         public string GetItemsInfo(params ItemType[] itemTypes)
         {
             StringBuilder sb = new StringBuilder();
-            Items.ForEach(item => { sb.AppendLine(item.GetItemInfo()); });
 
             foreach (var itemType in itemTypes)
             {
@@ -40,7 +38,46 @@ namespace SpartaConsoleGame
             if (findItem != null)
             {
                 findItem.IsEquiped = false;
+            }  
+        }
+
+        public void UsingItem(int itemIndex)
+        {
+            if (Items[itemIndex].BaseItem.Name == "HP 초급 포션")
+            {
+                if(DataManager.Instance.Player.Hp >= DataManager.Instance.Player.Stats.Hp)
+                {
+                    Console.WriteLine("체력이 이미 최대치에 도달했습니다.");
+                }
+                else
+                {
+                    int healAmount = 30;
+                    int maxHp = DataManager.Instance.Player.Stats.Hp;
+
+                    int newHp = DataManager.Instance.Player.Hp + healAmount;
+                    DataManager.Instance.Player.Hp = Math.Min(newHp, maxHp);
+
+                    Console.WriteLine($"체력을 {healAmount} 회복하였습니다. 현재 체력: {DataManager.Instance.Player.Hp}");
+                }
             }
+            else
+            {
+                if (DataManager.Instance.Player.Mp >= DataManager.Instance.Player.Stats.Mp)
+                {
+                    Console.WriteLine("마나가 이미 최대치에 도달했습니다.");
+                }
+                else
+                {
+                    int ManaAmount = 30;
+                    int maxMp = DataManager.Instance.Player.Stats.Mp;
+
+                    int newMp = DataManager.Instance.Player.Hp + ManaAmount;
+                    DataManager.Instance.Player.Hp = Math.Min(newMp, maxMp);
+
+                    Console.WriteLine($"마나를 {ManaAmount} 회복하였습니다. 현재 마나: {DataManager.Instance.Player.Mp}");
+                }
+            }
+            Thread.Sleep(600);
         }
 
         public void AddItem(Item item)
