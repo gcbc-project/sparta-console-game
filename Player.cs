@@ -85,15 +85,16 @@ namespace SpartaConsoleGame
             isCriticalHit = _random.NextDouble() < (Stats.Crit - 1);
             if (isCriticalHit)
             {
-                baseDamage = (int)(baseDamage * 1.6); // 치명타일 때 160% 데미지 적용
+                baseDamage = (int)(baseDamage * 1.6);
             }
             return baseDamage;
         }
-        public string Hit(int damage)
+        public string Hit(int damage, out bool isDodged, bool allowDodge = true)
         {
-            bool isDodged = _random.NextDouble() < (Stats.Eva - 1);
-            if (isDodged)
+            isDodged = false;
+            if (allowDodge && _random.NextDouble() < (Stats.Eva - 1))
             {
+                isDodged = true;
                 return "Missed";
             }
 

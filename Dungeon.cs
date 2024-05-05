@@ -161,19 +161,22 @@ namespace SpartaConsoleGame
         {
             int atk;
             bool isCritical = false;
+            bool isDodged = false;
+            string hp;
 
             if (skill != null)
             {
                 atk = skill.Use(offense);
-                isCritical = false; // 스킬 사용 시 치명타 여부 무시
+                isCritical = _random.NextDouble() < (offense.Stats.Crit - 1);
+                hp = defense.Hit(atk, out isDodged, allowDodge: false);  // 스킬로 공격 시 회피는 고려하지 않음
             }
             else
             {
                 atk = offense.Attack(out isCritical);
+                hp = defense.Hit(atk, out isDodged);
             }
 
             int prevHp = defense.Hp;
-            string hp = defense.Hit(atk);
 
             Menu menu = new Menu();
             menu.SetTitle("[Battle!!] - Turn");
@@ -182,7 +185,7 @@ namespace SpartaConsoleGame
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine($"{offense.Name}의 {(skill != null ? $"{skill.Name}" : "공격")}!");
 
-                if (hp == "Missed")
+                if (isDodged && skill == null)
                 {
                     sb.AppendLine($"Lv.{defense.Level} {defense.Name}을(를) 공격했지만 아무 일도 일어나지 않았습니다.");
                 }

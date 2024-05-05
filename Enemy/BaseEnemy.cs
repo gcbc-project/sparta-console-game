@@ -38,11 +38,12 @@ namespace SpartaConsoleGame
             }
             return sb.ToString();
         }
-        public virtual string Hit(int damage)
+        public string Hit(int damage, out bool isDodged, bool allowDodge = true)
         {
-            bool isDodged = random.NextDouble() < (Stats.Eva - 1);
-            if (isDodged)
+            isDodged = false;
+            if (allowDodge && random.NextDouble() < (Stats.Eva - 1))
             {
+                isDodged = true;
                 return "Missed";
             }
 

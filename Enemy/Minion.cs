@@ -8,7 +8,7 @@ namespace SpartaConsoleGame
 {
     public class Minion : BaseEnemy
     {
-        public Minion() : base(new Stats(hp :15, atk : 5, eva : 1.80f))
+        public Minion() : base(new Stats(hp :15, atk : 5, eva : 1.85f))
         {
             Name = "미니언";
             Level = 2;
