@@ -159,18 +159,44 @@ namespace SpartaConsoleGame
         }
         public void AttackTurn(ICharacter offense, ICharacter defense, ISkill skill = null)
         {
-            int atk = skill != null ? skill.Use(offense) : offense.Attack();
+            int atk;
+            bool isCritical = false;
+
+            if (skill != null)
+            {
+                atk = skill.Use(offense);
+                isCritical = false; // 스킬 사용 시 치명타 여부 무시
+            }
+            else
+            {
+                atk = offense.Attack(out isCritical);
+            }
+
             int prevHp = defense.Hp;
             string hp = defense.Hit(atk);
+
             Menu menu = new Menu();
             menu.SetTitle("[Battle!!] - Turn");
             menu.SetInfo(() =>
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine($"{offense.Name}의 {(skill != null ? $"{skill.Name}" : "공격")}!");
-                sb.AppendLine($"Lv.{defense.Level} {defense.Name} 을(를) 맞췄습니다. [데미지 : {atk}]\n");
-                sb.AppendLine($"Lv.{defense.Level} {defense.Name}");
-                sb.AppendLine($"HP {prevHp} => {hp}");
+
+                if (hp == "Missed")
+                {
+                    sb.AppendLine($"Lv.{defense.Level} {defense.Name}을(를) 공격했지만 아무 일도 일어나지 않았습니다.");
+                }
+                else
+                {
+                    sb.Append($"Lv.{defense.Level} {defense.Name}을(를) 맞췄습니다. [데미지 : {atk}]");
+                    if (isCritical)
+                    {
+                        sb.Append(" - 치명타 공격!!");
+                    }
+                    sb.AppendLine();
+                    sb.AppendLine($"Lv.{defense.Level} {defense.Name}");
+                    sb.AppendLine($"HP {prevHp} => {hp}");
+                }
                 return sb.ToString();
             });
             menu.SetExit(exitLabel: "다음");

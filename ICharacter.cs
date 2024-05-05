@@ -14,7 +14,7 @@ namespace SpartaConsoleGame
         public Stats Stats { get; set; }
         public List<ISkill> Skills { get; set; }
         public int Hp { get; set; }
-        public int Attack();
+        public int Attack(out bool isCritical);
         public string Hit(int damage);
     }
 }

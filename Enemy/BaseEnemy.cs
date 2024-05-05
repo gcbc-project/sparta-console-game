@@ -40,6 +40,12 @@ namespace SpartaConsoleGame
         }
         public virtual string Hit(int damage)
         {
+            bool isDodged = random.NextDouble() < (Stats.Eva - 1);
+            if (isDodged)
+            {
+                return "Missed";
+            }
+
             Hp -= damage;
             if (Hp <= 0)
             {
@@ -48,9 +54,15 @@ namespace SpartaConsoleGame
             }
             return Hp.ToString();
         }
-        public virtual int Attack()
+        public virtual int Attack(out bool isCriticalHit)
         {
-            return random.Next((int)Math.Round(Stats.Atk * 0.9f), (int)Math.Round(Stats.Atk * 1.1f));
+            int baseDamage = random.Next((int)Math.Round(Stats.Atk * 0.9f), (int)Math.Round(Stats.Atk * 1.1f));
+            isCriticalHit = random.NextDouble() < (Stats.Crit - 1);
+            if (isCriticalHit)
+            {
+                baseDamage = (int)(baseDamage * 1.6); // 치명타일 때 160% 데미지 적용
+            }
+            return baseDamage;
         }
 
         public virtual void Die()
