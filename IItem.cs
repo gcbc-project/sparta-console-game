@@ -11,7 +11,8 @@ namespace SpartaConsoleGame
     {
         Weapon,
         Armor,
-        Misc
+        Misc,
+        ConsumableItem
     }
 
     internal interface IItem
