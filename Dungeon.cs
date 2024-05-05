@@ -54,10 +54,12 @@ namespace SpartaConsoleGame
             menu.SetTitle("[Battle!!] - Result");
             if (isClear)
             {
+                int prevLevel = player.Level - 1;
                 menu.SetInfo(() => $"Victory\n", true);
                 menu.SetInfo(() => $"던전에서 몬스터 {SelectEnemyList.Count}마리를 잡았습니다.\n");
-                menu.SetInfo(() => $"보상 목록\n");
+                menu.SetInfo(() => $"[보상 목록]\n");
                 SetRewardItems( menu, player);
+                player.ExpUp(ExpReward, menu, player, prevHp);
 
             }
             else

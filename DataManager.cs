@@ -80,7 +80,7 @@ namespace SpartaConsoleGame
             DungeonManager = new DungeonManager();
             DungeonManager.DungeonList.Add(new Dungeon("쉬운", 5, 1000, 50, new List<IEnemy> { new Minion() }, new List<DropItem> { new DropItem(items[0].DeepCopy(), 0.25f), new DropItem(items[3].DeepCopy(), 0.25f), new DropItem(new Item("작은 결정석", "쉬운 던전 보상입니다.", 1000, ItemType.Misc, new Stats()), 100) }));
             DungeonManager.DungeonList.Add(new Dungeon("일반", 11, 1700, 75, new List<IEnemy> { new Minion(), new Voidling() }, new List<DropItem> { new DropItem(items[1].DeepCopy(), 0.2f), new DropItem(items[4].DeepCopy(), 0.2f), new DropItem(new Item("보통 결정석", "일반 던전 보상입니다.", 1500, ItemType.Misc, new Stats()), 100) }));
-            DungeonManager.DungeonList.Add(new Dungeon("어려운", 17, 2500, 100, new List<IEnemy> { new Minion(), new Voidling(), new CannonMinion() }, new List<DropItem> { new DropItem(items[2].DeepCopy(), 0.1f), new DropItem(items[6].DeepCopy(), 0.1f), new DropItem(new Item("존나 큰 결정석", "어려운 던전 보상입니다.", 3000, ItemType.Misc, new Stats()), 100) }));
+            DungeonManager.DungeonList.Add(new Dungeon("어려운", 17, 2500, 100, new List<IEnemy> { new Minion(), new Voidling(), new CannonMinion() }, new List<DropItem> { new DropItem(items[2].DeepCopy(), 0.1f), new DropItem(items[6].DeepCopy(), 0.1f), new DropItem(new Item("매우 큰 결정석", "어려운 던전 보상입니다.", 3000, ItemType.Misc, new Stats()), 100) }));
 
         }
     }
