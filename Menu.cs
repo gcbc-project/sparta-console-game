@@ -281,7 +281,7 @@
                 }
                 else
                 {
-                    return DataManager.Instance.Player.Inventory.GetItemsInfo( ItemType.Weapon, ItemType.Armor, ItemType.ConsumableItem, ItemType.Misc);
+                    return DataManager.Instance.Player.Inventory.GetItemsInfo();
                 }
             });
             invenMenu.AddMenuItem("장착관리", EquipMenu);
@@ -299,15 +299,11 @@
             equipMenu.SetTitle("[장착 메뉴]");
             equipMenu.SetRefreshMenu(() =>
             {
-                var equipmentItems = DataManager.Instance.Player.Inventory.Items;
+                List<InventoryItem> equipmentItems = DataManager.Instance.Player.Inventory.GetItems(ItemType.Weapon, ItemType.Armor);
                 for (int i = 0; i < equipmentItems.Count; i++)
                 {
-                    var item = equipmentItems[i];
-                    if (item.BaseItem.Type == ItemType.Weapon || item.BaseItem.Type == ItemType.Armor)
-                    {
-                        int index = i;
-                        equipMenu.AddMenuItem(item.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.EquipedItem(index); });
-                    }
+                    InventoryItem equipmentItem = equipmentItems[i];
+                    equipMenu.AddMenuItem(equipmentItem.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.EquipedItem(equipmentItem); });
                 }
             });
             equipMenu.SetInfo(() =>
@@ -330,15 +326,11 @@
             consumableItemMenu.SetTitle("[아이템 사용 메뉴]");
             consumableItemMenu.SetRefreshMenu(() =>
             {
-                var consumableItems = DataManager.Instance.Player.Inventory.Items;
-                for (int i = 0; i < consumableItems.Count; i++)
+                List<InventoryItem> consumableItems = DataManager.Instance.Player.Inventory.GetItems(ItemType.ConsumableItem);
+                for (int i = 0;i < consumableItems.Count; i++)
                 {
-                    var item = consumableItems[i];
-                    if (item.BaseItem.Type == ItemType.ConsumableItem)
-                    {
-                        int index = i;
-                        consumableItemMenu.AddMenuItem(item.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.UsingItem(index); });
-                    }
+                    InventoryItem consumableItem = consumableItems[i];
+                    consumableItemMenu.AddMenuItem(consumableItem.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.UsingItem(DataManager.Instance.Player, consumableItem); });
                 }
             });
             consumableItemMenu.SetInfo(() =>

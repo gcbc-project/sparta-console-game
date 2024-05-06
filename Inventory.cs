@@ -13,6 +13,13 @@ namespace SpartaConsoleGame
             Items = new List<InventoryItem>();
         }
 
+        public string GetItemsInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+            Items.ForEach(item => { sb.AppendLine(item.GetItemInfo()); });
+            return sb.ToString();
+        }
+
         public string GetItemsInfo(params ItemType[] itemTypes)
         {
             StringBuilder sb = new StringBuilder();
@@ -31,50 +38,68 @@ namespace SpartaConsoleGame
             return sb.ToString();
         }
 
-        public void EquipedItem(int itemIndex)
+        public List<InventoryItem> GetItems(params ItemType[] itemTypes)
         {
-            InventoryItem? findItem = Items.Find(item => item.IsEquiped && Items[itemIndex].BaseItem.Type == item.BaseItem.Type);
-            Items[itemIndex].IsEquiped = true;
+            List<InventoryItem> items = new List<InventoryItem>();
+            foreach (var itemType in itemTypes)
+            {
+                var itemsOfType = Items.Where(item => item.BaseItem.Type == itemType);
+
+                foreach (var item in itemsOfType)
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
+
+        public void EquipedItem(InventoryItem inventoryItem)
+        {
+            InventoryItem? findItem = Items.Find(item => item.IsEquiped && inventoryItem.BaseItem.Type == item.BaseItem.Type);
+            inventoryItem.IsEquiped = !inventoryItem.IsEquiped;
             if (findItem != null)
             {
                 findItem.IsEquiped = false;
-            }  
+            }
         }
 
-        public void UsingItem(int itemIndex)
+        public void UsingItem(Player player, InventoryItem inventoryItem)
         {
-            if (Items[itemIndex].BaseItem.Name == "HP 초급 포션")
+            if (inventoryItem.BaseItem.Name == "HP 초급 포션")
             {
-                if(DataManager.Instance.Player.Hp >= DataManager.Instance.Player.Stats.Hp)
+                if(player.Hp >= player.Stats.Hp)
                 {
                     Console.WriteLine("체력이 이미 최대치에 도달했습니다.");
                 }
                 else
                 {
                     int healAmount = 30;
-                    int maxHp = DataManager.Instance.Player.Stats.Hp;
+                    int maxHp = player.Stats.Hp;
 
-                    int newHp = DataManager.Instance.Player.Hp + healAmount;
-                    DataManager.Instance.Player.Hp = Math.Min(newHp, maxHp);
+                    int newHp = player.Hp + healAmount;
+                    player.Hp = Math.Min(newHp, maxHp);
 
-                    Console.WriteLine($"체력을 {healAmount} 회복하였습니다. 현재 체력: {DataManager.Instance.Player.Hp}");
+                    Console.WriteLine($"체력을 {healAmount} 회복하였습니다. 현재 체력: {player.Hp}");
+                    player.Inventory.RemoveItem(inventoryItem.BaseItem);
                 }
             }
             else
             {
-                if (DataManager.Instance.Player.Mp >= DataManager.Instance.Player.Stats.Mp)
+                if (player.Mp >= player.Stats.Mp)
                 {
                     Console.WriteLine("마나가 이미 최대치에 도달했습니다.");
                 }
                 else
                 {
                     int ManaAmount = 30;
-                    int maxMp = DataManager.Instance.Player.Stats.Mp;
+                    int maxMp = player.Stats.Mp;
 
-                    int newMp = DataManager.Instance.Player.Hp + ManaAmount;
-                    DataManager.Instance.Player.Hp = Math.Min(newMp, maxMp);
+                    int newMp = player.Hp + ManaAmount;
+                    player.Hp = Math.Min(newMp, maxMp);
 
-                    Console.WriteLine($"마나를 {ManaAmount} 회복하였습니다. 현재 마나: {DataManager.Instance.Player.Mp}");
+                    Console.WriteLine($"마나를 {ManaAmount} 회복하였습니다. 현재 마나: {player.Mp}");
+                    player.Inventory.RemoveItem(inventoryItem.BaseItem);
                 }
             }
             Thread.Sleep(600);
