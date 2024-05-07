@@ -14,7 +14,8 @@ namespace SpartaConsoleGame.Skill
         public override int Use(ICharacter character)
         {
             character.Stats.Mp -= MPCost;
-            return (int)Math.Ceiling(character.Attack() * 2.0f);
+            int baseDamage = character.Attack(out bool isCritical);
+            return (int)Math.Ceiling(baseDamage * 2.0f);
         }
     }
 }

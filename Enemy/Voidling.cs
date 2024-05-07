@@ -8,7 +8,7 @@ namespace SpartaConsoleGame
 {
     public class Voidling : BaseEnemy
     {
-        public Voidling() : base(new Stats(hp: 10, atk: 9))
+        public Voidling() : base(new Stats(hp: 10, atk: 9, eva: 1.10f))
         {
             Name = "공허충";
             Level = 3;

@@ -79,12 +79,25 @@ namespace SpartaConsoleGame
 
             return sb.ToString();
         }
-        public int Attack()
+        public int Attack(out bool isCriticalHit)
         {
-            return _random.Next((int)Math.Round(CalculateAtk * 0.9f), (int)Math.Round(CalculateAtk * 1.1f));
+            int baseDamage = _random.Next((int)Math.Round(CalculateAtk * 0.9f), (int)Math.Round(CalculateAtk * 1.1f));
+            isCriticalHit = _random.NextDouble() < (Stats.Crit - 1);
+            if (isCriticalHit)
+            {
+                baseDamage = (int)(baseDamage * 1.6);
+            }
+            return baseDamage;
         }
-        public string Hit(int damage)
+        public string Hit(int damage, out bool isDodged, bool allowDodge = true)
         {
+            isDodged = false;
+            if (allowDodge && _random.NextDouble() < (Stats.Eva - 1))
+            {
+                isDodged = true;
+                return "Missed";
+            }
+
             Hp -= damage;
             if (Hp <= 0)
             {
