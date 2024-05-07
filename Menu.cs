@@ -278,8 +278,8 @@
             Console.Clear();
             Menu saveMenu = new Menu();
             saveMenu.SetTitle(new ConsoleBuilder("[게임 저장]", () => true, ConsoleColor.DarkYellow));
-            saveMenu.SetDesc("게임을 저장 하시겠습니까?\n");
-            saveMenu.AddMenuItem("네", () =>
+            saveMenu.SetDesc("\n게임을 저장 하시겠습니까?\n");
+            saveMenu.AddMenuItem(new ConsoleBuilder("네", () => true, ConsoleColor.Green), () =>
             {
                 SaveManager.SaveData("Player", DataManager.Instance.Player);
                 SaveManager.SaveData("Shop", DataManager.Instance.Shop);
@@ -294,7 +294,7 @@
             Console.Clear();
             Menu exitMenu = new Menu();
             exitMenu.SetDesc("정말 게임을 종료하시겠습니까?\n");
-            exitMenu.AddMenuItem("네", () => Environment.Exit(0));
+            exitMenu.AddMenuItem(new ConsoleBuilder("네",()=> true, ConsoleColor.Green), () => Environment.Exit(0));
             exitMenu.SetExit(false, "아니요");
 
             exitMenu.Run();
