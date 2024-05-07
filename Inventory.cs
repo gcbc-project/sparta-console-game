@@ -20,9 +20,9 @@ namespace SpartaConsoleGame
             return cb;
         }
 
-        public string GetItemsInfo(params ItemType[] itemTypes)
+        public ConsoleBuilder GetItemsInfo(params ItemType[] itemTypes)
         {
-            StringBuilder sb = new StringBuilder();
+            ConsoleBuilder cb = new ConsoleBuilder();
 
             foreach (var itemType in itemTypes)
             {
@@ -31,11 +31,11 @@ namespace SpartaConsoleGame
 
                 foreach (var item in itemsOfType)
                 {
-                    sb.AppendLine(item.GetItemInfo());
+                    cb.Combine(item.GetItemInfo());
                 }
             }
 
-            return sb.ToString();
+            return cb;
         }
 
         public List<InventoryItem> GetItems(params ItemType[] itemTypes)
@@ -68,7 +68,7 @@ namespace SpartaConsoleGame
         {
             if (inventoryItem.BaseItem.Name == "HP 초급 포션")
             {
-                if(player.Hp >= player.Stats.Hp)
+                if (player.Hp >= player.Stats.Hp)
                 {
                     Console.WriteLine("체력이 이미 최대치에 도달했습니다.");
                 }
