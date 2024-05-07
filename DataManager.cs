@@ -68,7 +68,9 @@ namespace SpartaConsoleGame
                 new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 600, ItemType.Weapon, new Stats(atk: 2)),
                 new Item("청동 도끼", "어디선가 사용됐던 것 같은 도끼입니다.", 1500, ItemType.Weapon, new Stats(atk: 5)),
                 new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 3000, ItemType.Weapon, new Stats(atk: 7)),
-                new Item("광선검", "제다이 전사들이 사용하던 검입니다.", 5000, ItemType.Weapon, new Stats(atk: 15))
+                new Item("광선검", "제다이 전사들이 사용하던 검입니다.", 5000, ItemType.Weapon, new Stats(atk: 15)),
+                new Item("HP 초급 포션", "HP를 30회복시켜주는 초급 포션입니다.", 100, ItemType.ConsumableItem, new Stats()),
+                new Item("MP 초급 포션", "MP를 30회복시켜주는 초급 포션입니다.", 100, ItemType.ConsumableItem, new Stats())
             };
             Shop = new Shop();
 

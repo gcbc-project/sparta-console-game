@@ -285,6 +285,7 @@
                 }
             });
             invenMenu.AddMenuItem("장착관리", EquipMenu);
+            invenMenu.AddMenuItem("소비 아이템 사용", ConsumableItemMenu);
 
             invenMenu.Run();
         }
@@ -295,27 +296,52 @@
 
             Menu equipMenu = new Menu();
 
-            equipMenu.SetTitle("[인벤토리]");
+            equipMenu.SetTitle("[장착 메뉴]");
             equipMenu.SetRefreshMenu(() =>
             {
-                for (int i = 0; i < DataManager.Instance.Player.Inventory.Items.Count; i++)
+                List<InventoryItem> equipmentItems = DataManager.Instance.Player.Inventory.GetItems(ItemType.Weapon, ItemType.Armor);
+                for (int i = 0; i < equipmentItems.Count; i++)
                 {
-                    int index = i;
-                    equipMenu.AddMenuItem(DataManager.Instance.Player.Inventory.Items[index].GetItemInfo(), () => { DataManager.Instance.Player.Inventory.EquipedItem(index); });
-
+                    InventoryItem equipmentItem = equipmentItems[i];
+                    equipMenu.AddMenuItem(equipmentItem.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.EquipedItem(equipmentItem); });
                 }
             });
             equipMenu.SetInfo(() =>
             {
                 if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
-                    return "인벤토리이 비었습니다";
+                    return "인벤토리가 비었습니다";
                 }
                 return null;
-
-
             });
             equipMenu.Run();
+        }
+
+        public static void ConsumableItemMenu()
+        {
+            Console.Clear();
+
+            Menu consumableItemMenu = new Menu();
+
+            consumableItemMenu.SetTitle("[아이템 사용 메뉴]");
+            consumableItemMenu.SetRefreshMenu(() =>
+            {
+                List<InventoryItem> consumableItems = DataManager.Instance.Player.Inventory.GetItems(ItemType.ConsumableItem);
+                for (int i = 0;i < consumableItems.Count; i++)
+                {
+                    InventoryItem consumableItem = consumableItems[i];
+                    consumableItemMenu.AddMenuItem(consumableItem.GetItemInfo(), () => { DataManager.Instance.Player.Inventory.UsingItem(DataManager.Instance.Player, consumableItem); });
+                }
+            });
+            consumableItemMenu.SetInfo(() =>
+            {
+                if (DataManager.Instance.Player.Inventory.Items.Count == 0)
+                {
+                    return "인벤토리가 비었습니다";
+                }
+                return null;
+            });
+            consumableItemMenu.Run();
         }
 
         public static void ShopMenu()
