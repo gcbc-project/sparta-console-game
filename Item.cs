@@ -38,6 +38,7 @@ namespace SpartaConsoleGame
             newItem.Desc = this.Desc;
             newItem.Price = this.Price;
             newItem.Count = this.Count;
+            newItem.Type = this.Type;
             newItem.Stats = this.Stats.DeepCopy();
 
             return newItem;

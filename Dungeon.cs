@@ -54,10 +54,12 @@ namespace SpartaConsoleGame
             menu.SetTitle("[Battle!!] - Result");
             if (isClear)
             {
+                int prevLevel = player.Level - 1;
                 menu.SetInfo(() => $"Victory\n", true);
                 menu.SetInfo(() => $"던전에서 몬스터 {SelectEnemyList.Count}마리를 잡았습니다.\n");
-                menu.SetInfo(() => $"보상 목록\n");
-                SetRewardItems(menu, player);
+                menu.SetInfo(() => $"[보상 목록]\n");
+                SetRewardItems( menu, player);
+                player.ExpUp(ExpReward, menu, player, prevHp);
 
             }
             else
@@ -159,18 +161,47 @@ namespace SpartaConsoleGame
         }
         public void AttackTurn(ICharacter offense, ICharacter defense, ISkill skill = null)
         {
-            int atk = skill != null ? skill.Use(offense) : offense.Attack();
+            int atk;
+            bool isCritical = false;
+            bool isDodged = false;
+            string hp;
+
+            if (skill != null)
+            {
+                atk = skill.Use(offense);
+                isCritical = _random.NextDouble() < (offense.Stats.Crit - 1);
+                hp = defense.Hit(atk, out isDodged, allowDodge: false);  // 스킬로 공격 시 회피는 고려하지 않음
+            }
+            else
+            {
+                atk = offense.Attack(out isCritical);
+                hp = defense.Hit(atk, out isDodged);
+            }
+
             int prevHp = defense.Hp;
-            string hp = defense.Hit(atk);
+
             Menu menu = new Menu();
             menu.SetTitle("[Battle!!] - Turn");
             menu.SetInfo(() =>
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine($"{offense.Name}의 {(skill != null ? $"{skill.Name}" : "공격")}!");
-                sb.AppendLine($"Lv.{defense.Level} {defense.Name} 을(를) 맞췄습니다. [데미지 : {atk}]\n");
-                sb.AppendLine($"Lv.{defense.Level} {defense.Name}");
-                sb.AppendLine($"HP {prevHp} => {hp}");
+
+                if (isDodged && skill == null)
+                {
+                    sb.AppendLine($"Lv.{defense.Level} {defense.Name}을(를) 공격했지만 아무 일도 일어나지 않았습니다.");
+                }
+                else
+                {
+                    sb.Append($"Lv.{defense.Level} {defense.Name}을(를) 맞췄습니다. [데미지 : {atk}]");
+                    if (isCritical)
+                    {
+                        sb.Append(" - 치명타 공격!!");
+                    }
+                    sb.AppendLine();
+                    sb.AppendLine($"Lv.{defense.Level} {defense.Name}");
+                    sb.AppendLine($"HP {prevHp} => {hp}");
+                }
                 return sb.ToString();
             });
             menu.SetExit(exitLabel: "다음");

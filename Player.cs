@@ -79,12 +79,25 @@ namespace SpartaConsoleGame
 
             return sb.ToString();
         }
-        public int Attack()
+        public int Attack(out bool isCriticalHit)
         {
-            return _random.Next((int)Math.Round(CalculateAtk * 0.9f), (int)Math.Round(CalculateAtk * 1.1f));
+            int baseDamage = _random.Next((int)Math.Round(CalculateAtk * 0.9f), (int)Math.Round(CalculateAtk * 1.1f));
+            isCriticalHit = _random.NextDouble() < (Stats.Crit - 1);
+            if (isCriticalHit)
+            {
+                baseDamage = (int)(baseDamage * 1.6);
+            }
+            return baseDamage;
         }
-        public string Hit(int damage)
+        public string Hit(int damage, out bool isDodged, bool allowDodge = true)
         {
+            isDodged = false;
+            if (allowDodge && _random.NextDouble() < (Stats.Eva - 1))
+            {
+                isDodged = true;
+                return "Missed";
+            }
+
             Hp -= damage;
             if (Hp <= 0)
             {
@@ -106,6 +119,7 @@ namespace SpartaConsoleGame
                 Gold -= 500;
                 //휴식 하기
                 Hp = Stats.Hp;
+                Mp = Stats.Mp;
                 sb.AppendLine($"휴식 완료");
             }
             else if (Hp == 100)
@@ -119,22 +133,29 @@ namespace SpartaConsoleGame
             }
             return sb.ToString();
         }
-        public void ExpUp(float expReward)
+        public void ExpUp(float expReward, Menu menu, Player player, float prevExp)
         {
+            prevExp = NowExpStorage;
             NowExpStorage += expReward;
             if (MaxExpStorage <= NowExpStorage)
             {
-                LevelUp();
+                LevelUp(expReward, menu, player, prevExp);
+            }
+            else
+            {
+                menu.SetInfo(() => $" Lv. {player.Level} EXP {prevExp} ->   Lv. {player.Level} EXP {NowExpStorage}\n");
             }
         }
-        private void LevelUp()
+        private void LevelUp(float expReward, Menu menu, Player player, float prevExp)
         {
             float remainExp = NowExpStorage - MaxExpStorage;
-            Level++;
+            int prevLevel = player.Level;
+            Level++;    
             Stats.Def += 1;
             Stats.Atk += 2;
             MaxExpStorage = (float)Math.Round((double)(MaxExpStorage * 1.05f));
             NowExpStorage = remainExp;
+            menu.SetInfo(() => $"레벨업!  Lv. {prevLevel} EXP {prevExp} -> Lv. {player.Level} EXP {remainExp}\n");
         }
 
         private int CalculateItemStat(ItemType itemType)
