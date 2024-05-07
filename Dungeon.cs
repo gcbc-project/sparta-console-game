@@ -1,5 +1,5 @@
 ﻿using SpartaConsoleGame.Enemy;
-﻿using SpartaConsoleGame.Skill;
+using SpartaConsoleGame.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,11 +42,11 @@ namespace SpartaConsoleGame
             return sb.ToString();
         }
 
-        private string GetEnemiesInfo()
+        private ConsoleBuilder GetEnemiesInfo()
         {
-            StringBuilder sb = new StringBuilder();
-            SelectEnemyList.ForEach(enemy => { sb.AppendLine(enemy.GetEnemyInfo()); });
-            return sb.ToString();
+            ConsoleBuilder cb = new ConsoleBuilder();
+            SelectEnemyList.ForEach(enemy => { cb.Combine(enemy.GetEnemyInfo()); });
+            return cb;
         }
 
         private void Result(Menu menu, Player player, int prevHp, bool isClear)
@@ -233,11 +233,11 @@ namespace SpartaConsoleGame
                 if (itemRandom <= item.DropRate * 100)
                 {
                     player.Inventory.AddItem(item.BaseItem);
-                    menu.SetInfo(() => $"{item.GetItemInfo()}\n");
+                    menu.SetInfo(item.GetItemInfo);
                 }
             }
         }
 
-        
+
     }
 }

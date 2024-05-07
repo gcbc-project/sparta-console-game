@@ -18,6 +18,6 @@ namespace SpartaConsoleGame
     internal interface IItem
     {
         public Item BaseItem { get; set; }
-        public string GetItemInfo();
+        public ConsoleBuilder GetItemInfo();
     }
 }

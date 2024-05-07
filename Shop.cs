@@ -16,11 +16,11 @@ namespace SpartaConsoleGame
             Items = new List<ShopItem>();
         }
 
-        public string GetItemsInfo()
+        public ConsoleBuilder GetItemsInfo()
         {
-            StringBuilder sb = new StringBuilder();
-            Items.ForEach(item => { sb.AppendLine(item.GetItemInfo()); });
-            return sb.ToString();
+            ConsoleBuilder cb = new ConsoleBuilder();
+            Items.ForEach(item => { cb.Combine(item.GetItemInfo()); });
+            return cb;
         }
 
         public void Buy(Player player, int shopItemindex)

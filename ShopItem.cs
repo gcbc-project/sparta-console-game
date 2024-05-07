@@ -11,13 +11,13 @@ namespace SpartaConsoleGame
     {
         public Item BaseItem { get; set; }
         public bool IsPurchased { get; set; }
-        
+
         public ShopItem(Item item)
         {
             BaseItem = item;
         }
 
-        public string GetItemInfo()
+        public ConsoleBuilder GetItemInfo()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append($"{BaseItem.Name}\t|");
@@ -31,7 +31,7 @@ namespace SpartaConsoleGame
             }
             sb.Append($" {BaseItem.Desc}\t|");
             sb.Append($" {BaseItem.Price} G");
-            return sb.ToString();
+            return new ConsoleBuilder(sb.ToString());
         }
     }
 }

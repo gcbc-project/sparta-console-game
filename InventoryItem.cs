@@ -17,7 +17,7 @@ namespace SpartaConsoleGame
             BaseItem = item;
         }
 
-        public string GetItemInfo()
+        public ConsoleBuilder GetItemInfo()
         {
             StringBuilder sb = new StringBuilder();
             if (IsEquiped)
@@ -38,7 +38,7 @@ namespace SpartaConsoleGame
             {
                 sb.Append($" {BaseItem.Count} 개");
             }
-            return sb.ToString();
+            return new ConsoleBuilder(sb.ToString(), () => IsEquiped, ConsoleColor.Green);
         }
 
         public static explicit operator InventoryItem(ShopItem v)

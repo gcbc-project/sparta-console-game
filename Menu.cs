@@ -2,10 +2,10 @@
 {
     public struct MenuItem
     {
-        public string Label { get; private set; }
+        public ConsoleBuilder Label { get; private set; }
         public Action Action { get; private set; }
         public Func<bool> IsAction { get; private set; }
-        public MenuItem(string label, Action action, Func<bool> isAction)
+        public MenuItem(ConsoleBuilder label, Action action, Func<bool> isAction)
         {
             Label = label;
             Action = action;
@@ -16,12 +16,12 @@
 
     internal class Menu
     {
-        public string Title { get; private set; }
-        public string Description { get; private set; }
+        public ConsoleBuilder Title { get; private set; }
+        public ConsoleBuilder Description { get; private set; }
         public Action Info { get; private set; }
         public Action RefreshMenu { get; private set; }
         public bool IsExitHidden { get; private set; }
-        public string ExitLabel { get; private set; } = "나가기";
+        public ConsoleBuilder ExitLabel { get; private set; } = new ConsoleBuilder("나가기", () => true, ConsoleColor.Red);
         public Func<bool> IsSkip { get; set; }
         private List<MenuItem> _menuItems;
 
@@ -32,11 +32,24 @@
             _menuItems = new List<MenuItem>();
         }
 
-        public void SetExit(bool isExitHidden = false, string exitLabel = "나가기")
+        public void SetExit(bool isExitHidden = false, string exitLabel = null, bool isNewLine = true)
         {
+            if (exitLabel != null)
+            {
+                ExitLabel = new ConsoleBuilder(exitLabel);
+            }
             IsExitHidden = isExitHidden;
-            ExitLabel = exitLabel;
         }
+
+        public void SetExit(ConsoleBuilder exitLabel, bool isExitHidden = false)
+        {
+            if (exitLabel != null)
+            {
+                ExitLabel = exitLabel;
+            }
+            IsExitHidden = isExitHidden;
+        }
+
         public void SetIsSkip(Func<bool> isSkip)
         {
             IsSkip = isSkip;
@@ -51,54 +64,88 @@
                 refreshMenu();
             };
         }
-        public void SetTitle(string title)
+        public void SetTitle(string title, bool isNewLine = true)
+        {
+            Title = new ConsoleBuilder(title, isNewLine: isNewLine);
+        }
+
+        public void SetTitle(ConsoleBuilder title)
         {
             Title = title;
         }
 
-        public void SetDesc(string desc)
+        public void SetDesc(string desc, bool isNewLine = true)
+        {
+            Description = new ConsoleBuilder(desc, isNewLine: isNewLine);
+        }
+        public void SetDesc(ConsoleBuilder desc)
         {
             Description = desc;
         }
 
-        public void SetInfo(Func<string> info, bool isRefresh = false)
+        public void SetInfo(Func<string> info, bool isRefresh = false, bool isNewLine = true)
         {
             if (isRefresh)
             {
-                Info = () => { Console.WriteLine(info()); };
+                Info = () => { new ConsoleBuilder(info(), isNewLine: isNewLine).Display(); };
             }
             else
             {
-                Info += () => { Console.WriteLine(info()); };
+                Info += () => { new ConsoleBuilder(info(), isNewLine: isNewLine).Display(); };
             }
         }
+        public void SetInfo(Func<ConsoleBuilder> info, bool isRefresh = false)
+        {
+            if (isRefresh)
+            {
+                Info = () => { info().Display(); };
+            }
+            else
+            {
+                Info += () => { info().Display(); };
+            }
+        }
+        public void AddMenuItem(string option, Action action, Func<bool> isAction = null, bool isNewLine = true)
+        {
+            _menuItems.Add(new MenuItem(new ConsoleBuilder(option, isNewLine: isNewLine), action, isAction));
+        }
 
-        public void AddMenuItem(string option, Action action, Func<bool> isAction = null)
+        public void AddMenuItem(ConsoleBuilder option, Action action, Func<bool> isAction = null)
         {
             _menuItems.Add(new MenuItem(option, action, isAction));
         }
 
         public void Display()
         {
-            Console.WriteLine(Title);
-            Console.WriteLine(Description);
-            Info?.Invoke();
-            for (int i = 0; i < _menuItems.Count; i++)
+            Title?.Display();
+            Description?.Display();
+            if (Info != null)
             {
-                Console.WriteLine($"{i + 1}. {_menuItems[i].Label}");
+                Console.WriteLine();
+                Info?.Invoke();
+            }
+            if (_menuItems.Count != 0)
+            {
+                Console.WriteLine();
+                for (int i = 0; i < _menuItems.Count; i++)
+                {
+                    Console.Write($"{i + 1}. ");
+                    _menuItems[i].Label?.Display();
+                }
+                Console.WriteLine();
             }
 
             if (IsExitHidden == false)
             {
-                Console.WriteLine($"\n0. {ExitLabel}");
+                Console.Write($"0. ");
+                ExitLabel?.Display();
             }
         }
 
         public int HandleChoice()
         {
-
-
-            Console.Write("\n원하시는 행동을 입력해주세요. >> ");
+            Console.WriteLine();
+            Console.Write("원하시는 행동을 입력해주세요. >> ");
             string choice = Console.ReadLine();
 
             if (int.TryParse(choice, out int c) && c <= _menuItems.Count)
@@ -148,8 +195,8 @@
 
         public void StartMenuDesc()
         {
-            Console.WriteLine(Title);
-            Console.Write(Description);
+            Title.Display();
+            Description.Display();
         }
         public static void ChooseGame()
         {
@@ -168,7 +215,7 @@
                     MainMenu();
                 }
             });
-            chooseGameMenu.SetExit(true);
+            chooseGameMenu.SetExit(isExitHidden: true);
             chooseGameMenu.Run();
         }
 
@@ -177,8 +224,8 @@
             Console.Clear();
             Menu mainMenu = new Menu();
 
-            mainMenu.SetTitle("\n스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.");
-            mainMenu.SetDesc("\n이름을 입력해주세요 : ");
+            mainMenu.SetTitle("스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.\n");
+            mainMenu.SetDesc("이름을 입력해주세요 : ", isNewLine: false);
             mainMenu.StartMenuDesc();
             string playerName = Console.ReadLine();
 
@@ -188,8 +235,8 @@
         public static void JobChoiceMenu(string playerName)
         {
             Menu jobMenu = new Menu();
-            jobMenu.SetTitle("\n[직업 선택]");
-            jobMenu.SetDesc("\n직업을 선택해주세요 \n");
+            jobMenu.SetTitle("[직업 선택]");
+            jobMenu.SetDesc("직업을 선택해주세요");
 
             jobMenu.AddMenuItem("전사", () =>
             {
@@ -210,8 +257,8 @@
         public static void MainMenu()
         {
             Menu mainMenu = new Menu();
-
-            mainMenu.SetDesc("스파르타 마을에 오신 것을 환영합니다! \n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n");
+            mainMenu.SetTitle("스파르타 마을에 오신 것을 환영합니다!");
+            mainMenu.SetDesc("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.");
 
             mainMenu.AddMenuItem("상태보기", StatusMenu);
             mainMenu.AddMenuItem("인벤토리", InvenMenu);
@@ -277,7 +324,7 @@
 
                 if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
-                    return "인벤토리가 비었습니다\n";
+                    return new ConsoleBuilder("인벤토리가 비었습니다\n");
                 }
                 else
                 {

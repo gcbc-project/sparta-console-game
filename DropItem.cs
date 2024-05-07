@@ -18,12 +18,12 @@ namespace SpartaConsoleGame
             DropRate = dropRate;
         }
 
-        public string GetItemInfo()
+        public ConsoleBuilder GetItemInfo()
         {
             StringBuilder sb = new StringBuilder();
             // TODO : 리워드시 표시될 Info 작성
             sb.Append($"{BaseItem.Name}");
-            return sb.ToString();
+            return new ConsoleBuilder(sb.ToString());
         }
 
     }
