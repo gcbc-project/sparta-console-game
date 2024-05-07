@@ -39,7 +39,7 @@ namespace SpartaConsoleGame
         public string GetPlayerInfo()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"[내정보]");
+            sb.AppendLine("[내정보]");
             sb.AppendLine($"Lv.{Level} {Name} ({JobLabel})");
             sb.AppendLine($"HP {Hp}/{Stats.Hp}");
             sb.AppendLine($"MP : {Mp} / {Stats.Mp}");
@@ -75,7 +75,7 @@ namespace SpartaConsoleGame
         public string GetGold()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"[보유 골드] : {Gold} G\n");
+            sb.AppendLine($"[보유 골드] : {Gold} G");
 
             return sb.ToString();
         }

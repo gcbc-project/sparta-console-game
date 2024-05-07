@@ -144,7 +144,7 @@
 
         public int HandleChoice()
         {
-            Console.WriteLine();
+            Console.WriteLine("");
             Console.Write("원하시는 행동을 입력해주세요. >> ");
             string choice = Console.ReadLine();
 
@@ -201,7 +201,7 @@
         public static void ChooseGame()
         {
             Menu chooseGameMenu = new Menu();
-            chooseGameMenu.AddMenuItem("새 게임", StartMenu);
+            chooseGameMenu.AddMenuItem("새 게임\n", StartMenu);
             chooseGameMenu.AddMenuItem("불러오기", () =>
             {
                 DataManager.Instance.LoadGameData();
@@ -215,7 +215,7 @@
                     MainMenu();
                 }
             });
-            chooseGameMenu.SetExit(isExitHidden: true);
+            chooseGameMenu.SetExit(true);
             chooseGameMenu.Run();
         }
 
@@ -225,7 +225,7 @@
             Menu mainMenu = new Menu();
 
             mainMenu.SetTitle("스파르타 RPG에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.\n");
-            mainMenu.SetDesc("이름을 입력해주세요 : ", isNewLine: false);
+            mainMenu.SetDesc("이름 : ", isNewLine: false);
             mainMenu.StartMenuDesc();
             string playerName = Console.ReadLine();
 
@@ -235,8 +235,8 @@
         public static void JobChoiceMenu(string playerName)
         {
             Menu jobMenu = new Menu();
-            jobMenu.SetTitle("[직업 선택]");
-            jobMenu.SetDesc("직업을 선택해주세요");
+            jobMenu.SetTitle(new ConsoleBuilder ("[직업 선택]",() => true, ConsoleColor.DarkYellow));
+            jobMenu.SetDesc("\n직업을 선택해주세요");
 
             jobMenu.AddMenuItem("전사", () =>
             {
@@ -277,7 +277,7 @@
         {
             Console.Clear();
             Menu saveMenu = new Menu();
-            saveMenu.SetTitle("[게임 저장]");
+            saveMenu.SetTitle(new ConsoleBuilder("[게임 저장]", () => true, ConsoleColor.DarkYellow));
             saveMenu.SetDesc("게임을 저장 하시겠습니까?\n");
             saveMenu.AddMenuItem("네", () =>
             {
@@ -306,7 +306,7 @@
             Menu statusMenu = new Menu();
 
 
-            statusMenu.SetTitle("[스테이터스]");
+            statusMenu.SetTitle(new ConsoleBuilder("[스테이터스]", () => true, ConsoleColor.DarkYellow));
             statusMenu.SetInfo(DataManager.Instance.Player.GetStatus);
 
             statusMenu.Run();
@@ -318,13 +318,13 @@
 
             Menu invenMenu = new Menu();
 
-            invenMenu.SetTitle("[인벤토리]");
+            invenMenu.SetTitle(new ConsoleBuilder("[인벤토리]", () => true, ConsoleColor.DarkYellow));
             invenMenu.SetInfo(() =>
             {
 
                 if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
-                    return new ConsoleBuilder("인벤토리가 비었습니다\n");
+                    return new ConsoleBuilder("인벤토리가 비었습니다");
                 }
                 else
                 {
@@ -343,7 +343,7 @@
 
             Menu equipMenu = new Menu();
 
-            equipMenu.SetTitle("[장착 메뉴]");
+            equipMenu.SetTitle(new ConsoleBuilder("[장착 메뉴]", () => true, ConsoleColor.DarkYellow));
             equipMenu.SetRefreshMenu(() =>
             {
                 List<InventoryItem> equipmentItems = DataManager.Instance.Player.Inventory.GetItems(ItemType.Weapon, ItemType.Armor);
@@ -357,7 +357,7 @@
             {
                 if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
-                    return "인벤토리가 비었습니다";
+                    return "인벤토리가 비었습니다\n";
                 }
                 return null;
             });
@@ -370,7 +370,7 @@
 
             Menu consumableItemMenu = new Menu();
 
-            consumableItemMenu.SetTitle("[아이템 사용 메뉴]");
+            consumableItemMenu.SetTitle(new ConsoleBuilder("[아이템 사용 메뉴]", () => true, ConsoleColor.DarkYellow));
             consumableItemMenu.SetRefreshMenu(() =>
             {
                 List<InventoryItem> consumableItems = DataManager.Instance.Player.Inventory.GetItems(ItemType.ConsumableItem);
@@ -384,7 +384,7 @@
             {
                 if (DataManager.Instance.Player.Inventory.Items.Count == 0)
                 {
-                    return "인벤토리가 비었습니다";
+                    return "인벤토리가 비었습니다\n";
                 }
                 return null;
             });
@@ -396,8 +396,8 @@
             Console.Clear();
             Menu shopMenu = new Menu();
 
-            shopMenu.SetTitle("[상점]\n");
-            shopMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.\n");
+            shopMenu.SetTitle(new ConsoleBuilder("[상점]\n", () => true, ConsoleColor.DarkYellow));
+            shopMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.");
             shopMenu.SetInfo(DataManager.Instance.Player.GetGold);
             shopMenu.SetInfo(DataManager.Instance.Shop.GetItemsInfo);
             shopMenu.AddMenuItem("아이템 구매", BuyMenu);
@@ -410,7 +410,7 @@
         {
             Console.Clear();
             Menu buyMenu = new Menu();
-            buyMenu.SetTitle("[상점 - 아이템 구매]\n");
+            buyMenu.SetTitle(new ConsoleBuilder("[상점 - 아이템 구매]\n", () => true, ConsoleColor.DarkYellow));
             buyMenu.SetDesc($"필요한 아이템을 얻을 수 있는 상점입니다.");
             buyMenu.SetInfo(DataManager.Instance.Player.GetGold);
             buyMenu.SetRefreshMenu(() =>
@@ -430,8 +430,8 @@
         {
             Console.Clear();
             Menu sellMenu = new Menu();
-            sellMenu.SetTitle("[상점 - 아이템 판매]\n");
-            sellMenu.SetDesc($"보유한 아이템을 팔 수 있는 상점입니다.\n");
+            sellMenu.SetTitle(new ConsoleBuilder("[상점 - 아이템 판매]\n", () => true, ConsoleColor.DarkYellow));
+            sellMenu.SetDesc($"보유한 아이템을 팔 수 있는 상점입니다.");
             sellMenu.SetInfo(DataManager.Instance.Player.GetGold);
             sellMenu.SetRefreshMenu(() =>
             {
@@ -448,8 +448,8 @@
         {
             Console.Clear();
             Menu dungeonMenu = new Menu();
-            dungeonMenu.SetTitle("[던전 입장]\n");
-            dungeonMenu.SetDesc("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+            dungeonMenu.SetTitle(new ConsoleBuilder("[던전 입장]\n", () => true, ConsoleColor.DarkYellow));
+            dungeonMenu.SetDesc("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
 
             for (int i = 0; i < DataManager.Instance.DungeonManager.DungeonList.Count; i++)
             {
@@ -471,11 +471,11 @@
         {
             Console.Clear();
             Menu restMenu = new Menu();
-            restMenu.SetTitle("[휴식하기]");
+            restMenu.SetTitle(new ConsoleBuilder("[휴식하기]", () => true, ConsoleColor.DarkYellow));
             restMenu.SetDesc("500 G 를 내면 체력을 회복할 수 있습니다.");
             restMenu.SetInfo(DataManager.Instance.Player.GetGold);
 
-            restMenu.AddMenuItem("휴식하기", () =>
+            restMenu.AddMenuItem(new ConsoleBuilder("휴식하기", () => true, ConsoleColor.Green), () =>
             {
                 string result = DataManager.Instance.Player.Rest();
                 Console.WriteLine(result);

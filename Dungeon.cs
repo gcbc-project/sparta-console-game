@@ -51,7 +51,7 @@ namespace SpartaConsoleGame
 
         private void Result(Menu menu, Player player, int prevHp, bool isClear)
         {
-            menu.SetTitle("[Battle!!] - Result");
+            menu.SetTitle(new ConsoleBuilder("[Battle!!] - Result", () => true, ConsoleColor.DarkYellow));
             if (isClear)
             {
                 int prevLevel = player.Level - 1;
@@ -87,7 +87,7 @@ namespace SpartaConsoleGame
                 }
                 else
                 {
-                    menu.SetTitle("[Battle!!]");
+                    menu.SetTitle(new ConsoleBuilder("[Battle!!]", () => true, ConsoleColor.DarkYellow));
                     menu.SetInfo(player.GetPlayerInfo, true);
                     menu.SetInfo(GetEnemiesInfo);
 
@@ -105,7 +105,7 @@ namespace SpartaConsoleGame
         {
             bool isSkip = false;
             Menu menu = new Menu();
-            menu.SetTitle("[Battle!!]");
+            menu.SetTitle(new ConsoleBuilder("[Battle!!]", () => true, ConsoleColor.DarkYellow));
             menu.SetInfo(player.GetPlayerInfo, true);
             menu.SetInfo(GetEnemiesInfo);
 
@@ -125,7 +125,7 @@ namespace SpartaConsoleGame
         {
             bool isSkip = false;
             Menu menu = new Menu();
-            menu.SetTitle("[Battle!! - Phase]");
+            menu.SetTitle(new ConsoleBuilder("[Battle!! - Phase]", () => true, ConsoleColor.DarkYellow));
             menu.SetInfo(player.GetPlayerInfo);
             menu.SetRefreshMenu(() =>
             {
@@ -181,7 +181,7 @@ namespace SpartaConsoleGame
             int prevHp = defense.Hp;
 
             Menu menu = new Menu();
-            menu.SetTitle("[Battle!!] - Turn");
+            menu.SetTitle(new ConsoleBuilder($"[Battle!!] - Turn({offense.Name})", () => true, ConsoleColor.DarkYellow));
             menu.SetInfo(() =>
             {
                 StringBuilder sb = new StringBuilder();

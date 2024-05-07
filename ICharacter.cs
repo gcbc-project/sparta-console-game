@@ -14,6 +14,7 @@ namespace SpartaConsoleGame
         public Stats Stats { get; set; }
         public List<ISkill> Skills { get; set; }
         public int Hp { get; set; }
+        public int Mp { get; set; }
         public int Attack(out bool isCritical);
         string Hit(int damage, out bool isDodged, bool allowDodge = true);
     }
